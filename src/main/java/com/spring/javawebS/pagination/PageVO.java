@@ -1,5 +1,18 @@
 package com.spring.javawebS.pagination;
 
-public class PageVO {
+import lombok.Data;
 
+@Data
+public class PageVO {
+	private int pag;
+	private int pageSize;
+	private int totRecCnt;
+	private int totPage;
+	private int curScrStartNo;
+	private int curBlock;
+	private int blockSize;
+	private int lastBlock;
+	private int startIndexNo;
+	
+	private String part;
 }

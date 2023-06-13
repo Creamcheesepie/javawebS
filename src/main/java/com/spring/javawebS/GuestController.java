@@ -12,14 +12,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.spring.javawebS.pagination.PageProcess;
+import com.spring.javawebS.pagination.PageVO;
 import com.spring.javawebS.service.GuestService;
 import com.spring.javawebS.vo.GuestVO;
 
 @Controller
 @RequestMapping("/guest")
 public class GuestController {
+	
+	
 	@Autowired
 	GuestService guestService;
+	
+	@Autowired
+	PageProcess pageProcess;
 	
 	@RequestMapping(value = "/guestList" , method = RequestMethod.GET)
 	public String guestListGet(
@@ -27,6 +34,7 @@ public class GuestController {
 			@RequestParam(name="pageSize",defaultValue="1",required = false) int pageSize,
 			Model model) {
 		//페이지 처리
+		/*
 		int totRecCnt = guestService.totRecCnt();
 		int totPage = (totRecCnt%pageSize)==0?totRecCnt/pageSize : (totRecCnt/pageSize)+1;
 		int startIndexNo = (pag-1) * pageSize;
@@ -47,8 +55,14 @@ public class GuestController {
 		model.addAttribute("curBlock",curBlock);
 		model.addAttribute("lastBlock",lastBlock);
 		model.addAttribute("blockSize",blockSize);
+		*/
 		
 		
+		PageVO  pageVO = pageProcess.totRecCnt(pag , pageSize,"guest","","");
+		List<GuestVO> vos = guestService.getGuestList(pageVO.getStartIndexNo(), pageSize);
+		
+		model.addAttribute("vos",vos);
+		model.addAttribute("pageVO", pageVO);
 		return "guest/guestList";
 	}
 	
@@ -101,7 +115,24 @@ public class GuestController {
 	
 		return "redirect:/message/guestAdminLogout";
 		
-	}
+	}	
 	
+	//방명록 글 삭제하기
+	@RequestMapping(value = "/guestDelete" , method = RequestMethod.GET)
+	public String guestDeleteGet(
+			@RequestParam(name="idx",defaultValue="0",required = false)int idx
+			) {
+		int res = guestService.setGeustDelete(idx);
+		
+		if(res==1) {
+			return "redirect:/message/guestDeleteOk";
+		}
+		else {
+			return "redirect:/message/guestDeleteNo";
+		}
+		
+		
+		
+	}
 
 }

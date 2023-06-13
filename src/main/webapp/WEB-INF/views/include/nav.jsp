@@ -17,6 +17,8 @@
 					<a href="${ctp}/study/password/sha256" class="w3-bar-item w3-button">암호화(sha256)</a> 
 					<a href="${ctp}/study/password/aria" class="w3-bar-item w3-button">암호화(ARIA)</a> 
 					<a href="${ctp}/study/password/bCryptPassword" class="w3-bar-item w3-button">암호화(MD5)</a>
+					<a href="${ctp}/study/mail/mailForm" class="w3-bar-item w3-button">email연습</a>
+					<a href="${ctp}/study/uuid/uuidForm" class="w3-bar-item w3-button">uuid연습</a>
 				</div>
 			</div>
 			<c:if test="${empty sLevel}">

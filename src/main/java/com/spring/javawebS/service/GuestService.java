@@ -13,5 +13,7 @@ public interface GuestService {
 	public int getAdminCheck(String mid, String pwd);
 
 	public int totRecCnt();
+
+	public int setGeustDelete(int idx);
 	
 }

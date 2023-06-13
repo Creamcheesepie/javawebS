@@ -22,12 +22,12 @@
 	
 	function pageCheck(){
 		let pageSize = document.getElementById("pageSize").value;
-		location.href="${ctp}/guest/guestList?pag=${pag}&pageSize="+pageSize;
+		location.href="${ctp}/guest/guestList?pag=${pageVO.pag}&pageSize="+pageSize;
 	}
 	
 	function delCheck(idx){
 		let ans = confirm("현재 게시물을 삭제하십니까?");
-		if(ans) location.href="${ctp}/GuestDelete.gu?idx="+idx;
+		if(ans) location.href="${ctp}/guest/guestDelete?idx="+idx;
 	}
 	
 	</script>
@@ -63,19 +63,19 @@
 					</td>
 					<td class="text-right">
 						<!--첫페이지 /이전페이지/현재페이지번호/총페이지수/다음페이지/마지막페이지 -->
-						<c:if test="${pag>1}">
-							<a href="${ctp}/guest/guestList?pageSize=${pageSize}&pag=${1}">◁◁</a>
-							<a href="${ctp}/guest/guestList?pageSize=${pageSize}&pag=${pag-1}">◀</a>
+						<c:if test="${pageVO.pag>1}">
+							<a href="${ctp}/guest/guestList?pageSize=${pageVO.pageSize}&pag=${1}">◁◁</a>
+							<a href="${ctp}/guest/guestList?pageSize=${pageVO.pageSize}&pag=${pag-1}">◀</a>
 						</c:if>
 						${pag}/${totalPage}
 						<c:if test="${pag<totalPage}">
-							<a href="${ctp}/guest/guestList?pageSize=${pageSize}&pag=${pag+1}">▶</a>  
-							<a href="${ctp}/guest/guestList?pageSize=${pageSize}&pag=${totalPage}">▷▷</a>
+							<a href="${ctp}/guest/guestList?pageSize=${pageVO.pageSize}&pag=${pageVO.pag+1}">▶</a>  
+							<a href="${ctp}/guest/guestList?pageSize=${pageVO.pageSize}&pag=${pageVO.totPage}">▷▷</a>
 						</c:if>						
 					</td>
 				</tr>
 			</table>
-			
+			<c:set var="curScrStartNo" value="${pageVO.curScrStartNo}"/>
 		<c:forEach var="vo" items="${vos}" varStatus="st">
 			<table class="table table-borderless mb-0">
 				<tr>
@@ -118,24 +118,24 @@
 		<br/>
 		<!-- 처음 페이지 < 이전블록 < 1(4) 2(5) 3(6) > 다음블록 > 마지막 페이지 -->
 		<div class="text-center">
-    <c:if test="${pag > 1}">[<a href="${ctp}/guest/guestList?pageSize=${pageSize}&pag=1">첫페이지</a>]</c:if>
-    <c:if test="${curBlock > 0}">[<a href="${ctp}/guest/guestList?pageSize=${pageSize}&pag=${(curBlock-1)*blockSize + 1}">이전블록</a>]</c:if>
-    <c:forEach var="i" begin="${curBlock*blockSize + 1}" end="${curBlock*blockSize + blockSize}" varStatus="st">
-      <c:if test="${i <= totalPage && i == pag}">[<font color="red">${i}</font>]</c:if>
-      <c:if test="${i <= totalPage && i != pag}">[<font color="red"><a href="${ctp}/guest/guestList?pageSize=${pageSize}&pag=${i}">${i}</a></font>]</c:if>
+    <c:if test="${pageVO.pag > 1}">[<a href="${ctp}/guest/guestList?pageSize=${pageVO.pageSize}&pag=1">첫페이지</a>]</c:if>
+    <c:if test="${pageVO.curBlock > 0}">[<a href="${ctp}/guest/guestList?pageSize=${pageVO.pageSize}&pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}">이전블록</a>]</c:if>
+    <c:forEach var="i" begin="${pageVO.curBlock*pageVO.blockSize + 1}" end="${pageVO.curBlock*pageVO.blockSize + pageVO.blockSize}" varStatus="st">
+      <c:if test="${i <= pageVO.totPage && i == pageVO.pag}">[<font color="red">${i}</font>]</c:if>
+      <c:if test="${i <= pageVO.totPage && i != pageVO.pag}">[<font color="red"><a href="${ctp}/guest/guestList?pageSize=${pageSize}&pag=${i}">${i}</a></font>]</c:if>
     </c:forEach>
-    <c:if test="${curBlock < lastBlock}">[<a href="${ctp}/guest/guestList?pageSize=${pageSize}&pag=${(curBlock+1)*blockSize + 1}">다음블록</a>]</c:if>
-    <c:if test="${pag < totalPage}">[<a href="${ctp}/guest/guestList?pageSize=${pageSize}&pag=${totalPage}">마지막페이지</a>]</c:if>
+    <c:if test="${pageVO.curBlock < pageVO.lastBlock}">[<a href="${ctp}/guest/guestList?pageSize=${pageVO.pageSize}&pag=${(pageVO.curBlock+1)*pageVO.blockSize + 1}">다음블록</a>]</c:if>
+    <c:if test="${pageVO.pag < pageVO.totPage}">[<a href="${ctp}/guest/guestList?pageSize=${pageVO.pageSize}&pag=${pageVO.totPage}">마지막페이지</a>]</c:if>
 		<div class="text-center">
 			<ul class="pagination text-center justify-content-center border-secondary">	
-				<c:if test="${pag>1}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/guest/guestList?pageSize=${pageSize}&pag=1">첫페이지</a></li></c:if>
-				<c:if test="${curBlock>0}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/guest/guestList?pageSize=${pageSize}&pag=${(curBlock-1)*blockSize+1}">이전블록</a></li></c:if>
-				<c:forEach var="i" begin="${curBlock*blockSize+1}" end="${curBlock*blockSize + blockSize}" varStatus="st">
-					<c:if test="${i<=totalPage && i== pag}"><li class="page-item active bg-secondary"><a class="page-link bg-secondary" href="#">${i}</a></li></c:if>
-					<c:if test="${i<=totalPage && i!= pag}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/guest/guestList?pageSize=${pageSize}&pag=${i}">${i}</a></li></c:if>
+				<c:if test="${pageVO.pag>1}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/guest/guestList?pageSize=${pageVO.pageSize}&pag=1">첫페이지</a></li></c:if>
+				<c:if test="${pageVO.curBlock>0}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/guest/guestList?pageSize=${pageVO.pageSize}&pag=${(pageVO.curBlock-1)*pageVO.blockSize+1}">이전블록</a></li></c:if>
+				<c:forEach var="i" begin="${curBlock*blockSize+1}" end="${pageVO.curBlock*pageVO.blockSize + pageVO.blockSize}" varStatus="st">
+					<c:if test="${i<=pageVO.totPage && i== pageVO.pag}"><li class="page-item active bg-secondary"><a class="page-link bg-secondary" href="#">${i}</a></li></c:if>
+					<c:if test="${i<=pageVO.totPage && i!= pageVO.pag}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/guest/guestList?pageSize=${pageVO.pageSize}&pag=${i}">${i}</a></li></c:if>
 				</c:forEach>
-				<c:if test="${curBlock<lastBlock}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/guest/guestList?pageSize=${pageSize}&pag=${(curBlock+1)*blockSize+1}">다음블록</a></li></c:if>
-				<c:if test="${pag<totalPage}"><li class="page-item"><a class="page-link  text-secondary" href="${ctp}/guest/guestList?pageSize=${pageSize}&pag=${totalPage}">마지막페이지</a></li></c:if>
+				<c:if test="${pageVO.curBlock<pageVO.lastBlock}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/guest/guestList?pageSize=${pageVO.pageSize}&pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}">다음블록</a></li></c:if>
+				<c:if test="${pageVO.pag<pageVO.totPage}"><li class="page-item"><a class="page-link  text-secondary" href="${ctp}/guest/guestList?pageSize=${pageVO.pageSize}&pag=${pageVO.totPage}">마지막페이지</a></li></c:if>
 			</ul>
 		</div>
   </div>

@@ -17,7 +17,7 @@
 	
 		<h2 class="text-center">로그인</h2>
 	
-	<form name="myform" method="post" action="${ctp}/MemberLoginOk.mem" class="was-validated">
+	<form name="myform" method="post" class="was-validated">
 		<div class="form-group">
       <label for="mid">회원 아이디</label>
       <input type="text" class="form-control" name="mid" id="mid" placeholder="아이디를 입력하세요." value="${cMid}" required autofocus>
@@ -34,7 +34,7 @@
 	    <button type="submit" class="btn btn-primary">로그인</button>
 	    <button type="reset" class="btn btn-warning">리셋</button>
 	    <button type="button" onclick="location.href='${ctp}/'" class="btn btn-danger">돌아가기</button>
-	    <button type="button" onclick="location.href='${ctp}/memberJoin'" class="btn btn-danger">회원가입</button>
+	    <button type="button" onclick="location.href='${ctp}/member/memberJoin'" class="btn btn-danger">회원가입</button>
     </div>
     <div class="row">
     	<div class="col"><input type="checkbox" name="idSave" value="on" checked/>아이디저장</div>
