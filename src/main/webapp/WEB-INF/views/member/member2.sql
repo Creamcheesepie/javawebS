@@ -57,6 +57,7 @@ select * from memberChat order by idx desc limit 50;
 
 select chat.* from (select * from memberChat order by idx desc limit 50) as chat order by idx asc;
 
+select mid, nickName, email from member2
 
 
 

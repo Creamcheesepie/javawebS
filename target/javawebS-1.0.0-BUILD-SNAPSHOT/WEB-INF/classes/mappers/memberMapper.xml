@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.spring.javawebS.dao.MemberDAO">
+	
+	<select id="getMidCheck" resultType="com.spring.javawebS.vo.MemberVO">
+		select * from member2 where mid = #{mid};
+	</select>
+	
+	<select id="getNickNameCheck" resultType="com.spring.javawebS.vo.MemberVO">
+		select * from member2 where nickName = #{nickName};
+	</select>
+	
+	
+	
+	
+	<insert id="setMemberJoinOk">
+		insert into member2 values (default,#{vo.mid},#{vo.pwd},#{vo.nickName},#{vo.name},#{vo.gender},#{vo.birthday},#{vo.tell},#{vo.address},#{vo.email},#{vo.homePage},#{vo.job},#{vo.hobbys},#{vo.photo},#{vo.content},#{vo.userInfoSw},default,default,default,default,default,default,default);
+	</insert>
+	
+	
+	
+	<update id="setMemberVisitProcess">
+		update member2 set point=point+10, lastDate=now(), todayCnt=todayCnt+1, visitCnt=visitCnt+1 where mid = #{vo.mid};
+	</update>
+	
+
+</mapper>

@@ -3,6 +3,9 @@
   
 <mapper namespace="com.spring.javawebS.dao.StudyDAO">
 	
+	<select id="getEmail" resultType="com.spring.javawebS.vo.EmailListVO">
+		select mid, nickName, email from member2;
+	</select>
 
 
 </mapper>

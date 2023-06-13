@@ -69,6 +69,10 @@ public class MessageController {
 			model.addAttribute("msg", "로그인 실패.");
 			model.addAttribute("url","/member/memberLogin");
 		}
+		else if(msgFlag.equals("memberLogout")) {
+			model.addAttribute("msg", "로그아웃 되었습니다.");
+			model.addAttribute("url","/member/memberLogin");
+		}
 		
 
 		

@@ -2,6 +2,7 @@ package com.spring.javawebS;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
+import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -14,6 +15,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.spring.javawebS.common.ARIAUtil;
 import com.spring.javawebS.common.SecurityUtil;
 import com.spring.javawebS.service.StudyService;
+import com.spring.javawebS.vo.EmailListVO;
 import com.spring.javawebS.vo.MailVO;
 
 @Controller
@@ -124,6 +127,7 @@ public class StudyController {
 		
 		//본문에 첨부된 이미지 파일의 경로를 지정해준다. 그 후 다시 보관함에 담아준다.
 		FileSystemResource file = new FileSystemResource("D:\\JavaWorkspace\\springframework\\works\\javawebS\\src\\main\\webapp\\resources\\images\\main.jpg");
+		
 		messageHelper.addInline("main.jpg", file);
 		
 		//첨부파일(서버의 파일 시스템에 존재하는 파일을 보내기)
@@ -144,6 +148,16 @@ public class StudyController {
 		
 		
 		return "redirect:/message/mailSendOk";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/mail/mailList", method = RequestMethod.POST)
+	public List<EmailListVO> mailListGet(Model model) {
+		
+		List<EmailListVO> vos = service.getEmail();
+		
+		System.out.println(vos);
+		return vos;
 	}
 	
 	

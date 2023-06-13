@@ -7,6 +7,31 @@
 	<meta charset="UTF-8">
 	<title>title</title>
 	<jsp:include page="/WEB-INF/views/include/bs4.jsp"/>
+	<script>
+	'use strict'
+	
+	function mailList(){
+		$.ajax({
+			type : "post",
+			url : "${ctp}/study/mail/mailList",
+			success:function(res){
+				
+				var vos = res;
+				
+				
+				$("#mailListModal").modal();
+				
+			}
+		})
+		
+	}
+	
+	
+	function selectEmail(email){
+		$("#toMail").val(email);
+		$("#mailListModel").hide;
+	}
+	</script>
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/include/nav.jsp"/>
@@ -35,6 +60,7 @@
 				<td colspan="2" class="text-center">
 					<input type="submit" value="메일전송" class="btn btn-success"/>
 					<input type="reset" value="다시쓰기" class="btn btn-warning"/>
+					<input type="button" value="주소록" onclick="mailList()" class="btn btn-info"/>
 					<input type="button" value="돌아가기" onclick="location.herf='${ctp}/'" class="btn btn-success"/>
 					
 				</td>
@@ -43,6 +69,41 @@
 	</form>
 
 </div>
+  <!-- The Modal -->
+  <div class="modal" id="mailListModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">주소록</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <c:forEach var="vo" items="${vos}" varStatus="st">
+          	<div class="row">
+          		<div class="col-4">닉네임(아이디)</div>
+          		<div class="col-8">${vo.nickName}(${vo.mid})</div>
+          		<div class="col-3">이메일</div>
+          		<div class="col-9">${vo.email}</div>
+          		<div class="col-12">
+          			<input type="button" onclick="selectEmail(${vo.email})" value="보내기"/>
+          		</div>
+          	</div>
+          	<hr/>
+          </c:forEach>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
 <p><br/></p>
 <jsp:include page="/WEB-INF/views/include/footer.jsp"/>
 </body>

@@ -60,7 +60,7 @@ public class MemberController {
 			) {
 		MemberVO vo = memberService.getMidCheck(mid);
 		
-		if(vo != null&& vo.getUserDel().equals("NO")&& bCryptPasswordEncoder.matches(pwd, vo.getPwd())) {
+		if(vo != null && vo.getUserDel().equals("no") && bCryptPasswordEncoder.matches(pwd, vo.getPwd())) {
 			//회원이 인증처리된 경우? strLevel, Session에 저장, 쿠키저장, 방문자수, 방문포인트 증가...
 			String strLevel = "";
 			if(vo.getLevel() ==0) strLevel = "관리자";
@@ -99,6 +99,12 @@ public class MemberController {
 			return "redirect:/message/memberLoginNo";
 		}
 		
+	}
+	
+	@RequestMapping(value = "/memberLogout", method = RequestMethod.GET)
+	public String memberLogoutGet(HttpSession session) {
+		session.invalidate();
+		return "redirect:/message/memberLogout";
 	}
 	
 	@RequestMapping(value = "/memberJoin" , method = RequestMethod.GET)
