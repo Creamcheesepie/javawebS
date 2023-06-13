@@ -26,7 +26,7 @@ public class GuestController {
 			@RequestParam(name="pag",defaultValue="1",required = false) int pag,
 			@RequestParam(name="pageSize",defaultValue="1",required = false) int pageSize,
 			Model model) {
-		
+		//페이지 처리
 		int totRecCnt = guestService.totRecCnt();
 		int totPage = (totRecCnt%pageSize)==0?totRecCnt/pageSize : (totRecCnt/pageSize)+1;
 		int startIndexNo = (pag-1) * pageSize;
