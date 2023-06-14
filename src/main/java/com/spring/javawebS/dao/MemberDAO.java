@@ -17,4 +17,10 @@ public interface MemberDAO {
 
 	public void setMemberVisitProcess(@Param("vo") MemberVO vo);
 
+
+	public void setMemberPwdUpdate(@Param("mid") String mid,@Param("pwd") String pwd);
+
+
+	public MemberVO getEmailCheck(@Param("email") String email);
+
 }

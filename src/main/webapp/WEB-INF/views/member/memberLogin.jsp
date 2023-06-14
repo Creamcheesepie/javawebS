@@ -39,8 +39,8 @@
     <div class="row">
     	<div class="col"><input type="checkbox" name="idSave" value="on" checked/>아이디저장</div>
     	<div class="col">
-    		<a href="${ctp}/MemberMidFind.mem">아이디찾기</a>
-    		<a href="${ctp}/MemberPwdFind.mem">비밀번호찾기</a>
+    		<a href="${ctp}/member/memberMidFind">아이디찾기</a>
+    		<a href="${ctp}/member/memberPwdFind">비밀번호찾기</a>
     	</div>
     </div>
 	</form>

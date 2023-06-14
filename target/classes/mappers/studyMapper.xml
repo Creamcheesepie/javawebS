@@ -7,5 +7,14 @@
 		select mid, nickName, email from member2;
 	</select>
 
+	<select id="getMemberMidSearch" resultType="com.spring.javawebS.vo.MemberVO">
+		select * from member2 where mid= #{mid};
+	</select>
+	
+	<select id="getMemberPartMidSearch" resultType="com.spring.javawebS.vo.MemberVO">
+		select * from member2 where mid like concat('%',#{mid},'%') order by idx desc;
+	</select>
+	
+	
 
 </mapper>

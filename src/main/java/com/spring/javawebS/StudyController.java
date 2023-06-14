@@ -2,6 +2,8 @@ package com.spring.javawebS;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +27,7 @@ import com.spring.javawebS.common.SecurityUtil;
 import com.spring.javawebS.service.StudyService;
 import com.spring.javawebS.vo.EmailListVO;
 import com.spring.javawebS.vo.MailVO;
+import com.spring.javawebS.vo.MemberVO;
 
 @Controller
 @RequestMapping("/study")
@@ -95,8 +98,10 @@ public class StudyController {
 	
 	//이메일 연습
 	@RequestMapping(value = "/mail/mailForm", method = RequestMethod.GET)
-	public String mailFormGet() {
+	public String mailFormGet(Model model) {
+		List<EmailListVO> vos = service.getEmail();
 		
+		model.addAttribute("vos",vos);
 		return "study/mail/mailForm";
 	}
 	
@@ -150,16 +155,7 @@ public class StudyController {
 		return "redirect:/message/mailSendOk";
 	}
 	
-	@ResponseBody
-	@RequestMapping(value = "/mail/mailList", method = RequestMethod.POST)
-	public List<EmailListVO> mailListGet(Model model) {
-		
-		List<EmailListVO> vos = service.getEmail();
-		
-		System.out.println(vos);
-		return vos;
-	}
-	
+
 	
 	@RequestMapping(value = "/uuid/uuidForm",method = RequestMethod.GET)
 	public String uuidFormGet() {
@@ -176,5 +172,87 @@ public class StudyController {
 		return uuid.toString();
 	}
 	
+	@RequestMapping(value = "/ajax/ajaxForm",method = RequestMethod.GET)
+	public String ajaxFormGet() {
+		return "study/ajax/ajaxForm";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/ajax/ajaxTest1",method = RequestMethod.POST,produces = "application/text; charset=utf-8")
+	public String aJaxTest1Post(int idx) {
+		idx = (int)(Math.random()*idx)+1;
+		return idx+" : 행복하십쇼!";
+	}
+	
+	//일반 배열값의 전달
+	@RequestMapping(value = "/ajax/ajaxTest2_1",method = RequestMethod.GET)
+	public String ajaxTest2_1FormGet() {
+		return "study/ajax/ajaxTest2_1";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/ajax/ajaxTest2_1",method = RequestMethod.POST)
+	public String[] ajaxTest2_1FormPost(String dodo) {
+		/*
+		 String[] strArray = new String[100];
+		 service.getCityStringArray(dodo);
+		 */
+
+		return service.getCityStringArray(dodo);
+	}
+	
+	//객체 배열(arrayList)값의 전달
+	@RequestMapping(value = "/ajax/ajaxTest2_2",method = RequestMethod.GET)
+	public String ajaxTest2_2FormGet() {
+		return "study/ajax/ajaxTest2_2";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/ajax/ajaxTest2_2", method = RequestMethod.POST)
+	public ArrayList<String> ajaxTest2_2FormPost(String dodo){
+		
+		return service.getCityArrayList(dodo);
+	}
+	
+	//Map(HashMap<k,v>값의 전달
+	@RequestMapping(value = "/ajax/ajaxTest2_3",method = RequestMethod.GET)
+	public String ajaxTest2_3FormGet() {
+		return "study/ajax/ajaxTest2_3";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/ajax/ajaxTest2_3", method = RequestMethod.POST)
+	public HashMap<Object, Object> ajaxTest2_3FormPost(String dodo){
+		ArrayList<String> vos = new ArrayList<String>();
+		vos = service.getCityArrayList(dodo);
+		
+		HashMap<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("city", vos);
+
+		return map;
+	}
+	
+	//DB를 이용한 값의 전달 폼
+	@RequestMapping(value = "/ajax/ajaxTest3",method = RequestMethod.GET)
+	public String ajaxTest3FormGet() {
+		return "study/ajax/ajaxTest3";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/ajax/ajaxTest3_1",method = RequestMethod.POST)
+	public MemberVO ajaxTest3_1FormGet(String mid) {
+		
+		
+		return service.getMemberMidSearch(mid);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/ajax/ajaxTest3_2",method = RequestMethod.POST)
+	public ArrayList<MemberVO> ajaxTest3_2FormGet(String mid) {
+		
+		
+		return service.getMemberPartMidSearch(mid);
+	}
 	
 }

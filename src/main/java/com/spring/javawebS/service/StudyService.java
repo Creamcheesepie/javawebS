@@ -1,11 +1,21 @@
 package com.spring.javawebS.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.spring.javawebS.vo.EmailListVO;
+import com.spring.javawebS.vo.MemberVO;
 
 public interface StudyService {
 
 	public List<EmailListVO> getEmail();
+
+	public String[] getCityStringArray(String dodo);
+
+	public ArrayList<String> getCityArrayList(String dodo);
+
+	public MemberVO getMemberMidSearch(String mid);
+
+	public ArrayList<MemberVO> getMemberPartMidSearch(String mid);
 
 }

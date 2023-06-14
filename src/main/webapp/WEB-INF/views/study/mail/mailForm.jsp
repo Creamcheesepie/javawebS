@@ -10,26 +10,10 @@
 	<script>
 	'use strict'
 	
-	function mailList(){
-		$.ajax({
-			type : "post",
-			url : "${ctp}/study/mail/mailList",
-			success:function(res){
-				
-				var vos = res;
-				
-				
-				$("#mailListModal").modal();
-				
-			}
-		})
-		
-	}
-	
 	
 	function selectEmail(email){
 		$("#toMail").val(email);
-		$("#mailListModel").hide;
+		$("#mailListModal").modal('hide');
 	}
 	</script>
 </head>
@@ -45,7 +29,7 @@
 			<tr>
 				<th>받는사람</th>
 				<td>
-					<input type="text" name="toMail" value="${email}" placeholder="받는 사람의 메일 주소를 입력하세요" class="form-control" required autofocus />
+					<input type="text" name="toMail" id="toMail" value="${email}" placeholder="받는 사람의 메일 주소를 입력하세요" class="form-control" required autofocus />
 				</td>
 			</tr>
 			<tr>
@@ -60,7 +44,7 @@
 				<td colspan="2" class="text-center">
 					<input type="submit" value="메일전송" class="btn btn-success"/>
 					<input type="reset" value="다시쓰기" class="btn btn-warning"/>
-					<input type="button" value="주소록" onclick="mailList()" class="btn btn-info"/>
+					<input type="button" value="주소록" class="btn btn-info" data-toggle="modal" data-target="#mailListModal"/>
 					<input type="button" value="돌아가기" onclick="location.herf='${ctp}/'" class="btn btn-success"/>
 					
 				</td>
@@ -89,7 +73,7 @@
           		<div class="col-3">이메일</div>
           		<div class="col-9">${vo.email}</div>
           		<div class="col-12">
-          			<input type="button" onclick="selectEmail(${vo.email})" value="보내기"/>
+          			<input type="button" onclick="selectEmail('${vo.email}')" value="보내기" data-dismiss="modal"/>
           		</div>
           	</div>
           	<hr/>

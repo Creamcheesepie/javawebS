@@ -11,5 +11,9 @@ public interface MemberService {
 	public int setMemberJoinOk(MemberVO vo);
 
 	public void setMemberVisitProcess(MemberVO vo);
+
+	public void setMemberPwdUpdate(String mid, String pwd);
+
+	public MemberVO getEmailCheck(String email);
 	
 }

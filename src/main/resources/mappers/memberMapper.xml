@@ -11,6 +11,10 @@
 		select * from member2 where nickName = #{nickName};
 	</select>
 	
+	<select id="getEmailCheck" resultType="com.spring.javawebS.vo.MemberVO">
+		select * from member2 where email = #{email};
+	</select>
+	
 	
 	
 	
@@ -22,6 +26,10 @@
 	
 	<update id="setMemberVisitProcess">
 		update member2 set point=point+10, lastDate=now(), todayCnt=todayCnt+1, visitCnt=visitCnt+1 where mid = #{vo.mid};
+	</update>
+	
+	<update id="setMemberPwdUpdate">
+		update member2 set pwd = #{pwd} where mid = #{mid};
 	</update>
 	
 
