@@ -1,5 +1,6 @@
 package com.spring.javawebS;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -16,6 +17,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -291,6 +293,23 @@ public class MemberController {
 		
 		return outMid;
 	}
+	
+	@RequestMapping(value = "/memberList", method=RequestMethod.GET)
+	public String memberListGet(Model model) {
+		List<MemberVO> vos = memberService.getMemberList();
+		model.addAttribute("vos",vos);
+		return "member/memberList";
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/memberDetailInfo", method=RequestMethod.POST)
+	public MemberVO memberDetailInfoPost(int idx) {
+		MemberVO vo = memberService.getMemberDetailInfo(idx);
+		return vo;
+	}
+	
+
 
 
 	

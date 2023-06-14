@@ -15,6 +15,15 @@
 		select * from member2 where email = #{email};
 	</select>
 	
+	<select id="getMemberList" resultType="com.spring.javawebS.vo.MemberVO">
+		select * from member2;
+	</select>
+	
+	<select id="getMemberDetailInfo" resultType="com.spring.javawebS.vo.MemberVO">
+		select * from member2 where idx = #{idx};
+	</select>
+	
+	
 	
 	
 	

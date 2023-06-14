@@ -1,5 +1,7 @@
 package com.spring.javawebS.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.spring.javawebS.vo.MemberVO;
@@ -22,5 +24,11 @@ public interface MemberDAO {
 
 
 	public MemberVO getEmailCheck(@Param("email") String email);
+
+
+	public List<MemberVO> getMemberList();
+
+
+	public MemberVO getMemberDetailInfo(@Param("idx") int idx);
 
 }

@@ -1,5 +1,7 @@
 package com.spring.javawebS.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +48,18 @@ public class MemberServiceImpl implements MemberService {
 	public MemberVO getEmailCheck(String email) {
 		
 		return memberDAO.getEmailCheck(email);
+	}
+
+	@Override
+	public List<MemberVO> getMemberList() {
+		
+		return memberDAO.getMemberList();
+	}
+
+	@Override
+	public MemberVO getMemberDetailInfo(int idx) {
+		
+		return memberDAO.getMemberDetailInfo(idx);
 	}
 
 

@@ -1,5 +1,7 @@
 package com.spring.javawebS.service;
 
+import java.util.List;
+
 import com.spring.javawebS.vo.MemberVO;
 
 public interface MemberService {
@@ -15,5 +17,9 @@ public interface MemberService {
 	public void setMemberPwdUpdate(String mid, String pwd);
 
 	public MemberVO getEmailCheck(String email);
+
+	public List<MemberVO> getMemberList();
+
+	public MemberVO getMemberDetailInfo(int idx);
 	
 }
