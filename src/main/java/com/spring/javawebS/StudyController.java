@@ -1,5 +1,8 @@
 package com.spring.javawebS;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
@@ -9,7 +12,9 @@ import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -20,7 +25,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javawebS.common.ARIAUtil;
 import com.spring.javawebS.common.SecurityUtil;
@@ -32,6 +39,7 @@ import com.spring.javawebS.vo.MemberVO;
 @Controller
 @RequestMapping("/study")
 public class StudyController {
+	
 	@Autowired
 	StudyService service;
 	
@@ -254,5 +262,84 @@ public class StudyController {
 		
 		return service.getMemberPartMidSearch(mid);
 	}
+	
+	/*
+	 * @RequestMapping(value = "/fileUpload/fileUploadform", method =
+	 * RequestMethod.GET) public String fileUploadGet() { return
+	 * "study/fileupload/fileUploadform"; }
+	 */
+	
+	
+	@RequestMapping(value = "/fileUpload/fileUploadform", method =  RequestMethod.GET)
+	public String fileUploadGet(HttpServletRequest request, Model model) {
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/study");
+		
+		String[] files = new File(realPath).list();
+		
+		/*
+		 * for(String file : files) { System.out.println("file : " + file); }
+		 */
+		model.addAttribute("files",files);
+		model.addAttribute("filesCnt",files.length);
+		
+		return "study/fileupload/fileUploadform";
+	}
+	
+	@RequestMapping(value = "/fileUpload/fileUploadform", method =  RequestMethod.POST)
+	public String fileUploadPost(MultipartFile fName,String mid) {
+		//System.out.println(fName);
+		//System.out.println(mid);
+		
+		int res = service.fileUpload(fName,mid);
+		
+		if(res == 1) return "redirect:/message/fileUploadOk";
+		else return "redirect:/message/fileUploadNo";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/fileUpload/fileDelete", method =  RequestMethod.POST)
+	public String fileDeletePost(
+			@RequestParam(name="file", defaultValue = "",required = false) String fName,
+			HttpServletRequest request
+			) {
+		String res = "0";
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/study/");
+		File file = new File(realPath+fName);
+		if(file.exists()) {
+			file.delete();
+			res = "1";
+		}
+		
+
+		return res;
+	}
+	
+	
+	@RequestMapping(value = "/fileUpload/fileDownAction", method =  RequestMethod.GET)
+	public void fileDownActionGet(HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
+		String fName = request.getParameter("file");
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/study/");
+		
+		File file = new File(realPath+fName);
+		
+		String fileName = new String(fName.getBytes("utf-8"),"8859_1");
+		
+		response.setHeader("content-Disposition","attachment:filename="+fileName);
+		
+		FileInputStream fis = new FileInputStream(file);
+		ServletOutputStream sos = response.getOutputStream();
+		
+		byte[] buffer = new byte[2048];
+		int data = 0;
+		while((data=fis.read(buffer,0,buffer.length)) !=-1) {
+			sos.write(buffer,0,data);
+		}
+		sos.flush();
+		sos.close();
+		fis.close();
+
+		
+	}
+	
 	
 }

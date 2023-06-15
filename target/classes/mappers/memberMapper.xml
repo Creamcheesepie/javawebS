@@ -23,6 +23,11 @@
 		select * from member2 where idx = #{idx};
 	</select>
 	
+	<select id="getMemberSearch" resultType="com.spring.javawebS.vo.MemberVO" >
+		select * from member2 where ${keyWord} like concat('%',#{searchStr},'%') order by idx desc;
+	</select>
+	
+	
 	
 	
 	
@@ -39,6 +44,14 @@
 	
 	<update id="setMemberPwdUpdate">
 		update member2 set pwd = #{pwd} where mid = #{mid};
+	</update>
+	
+	<update id="setMemberUpdateOk">
+		update member2 set nickName = #{vo.nickName} , name = #{vo.name}, gender=#{vo.gender} , birthday = #{vo.birthday}, tell = #{vo.tell} , address = #{vo.address} , email = #{vo.email} , homePage = #{vo.homePage} , job = #{vo.job} , hobby = #{vo.hobby} , photo = #{vo.photo}, content = #{vo.content} , userInfoSw = #{vo.userInfoSw} where mid=#{vo.mid} ;
+	</update>
+	
+	<update id="setMemberDelete">
+		update member2 set userDel = 'ok' where mid = #{mid};
 	</update>
 	
 

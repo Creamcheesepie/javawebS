@@ -73,42 +73,75 @@ public class MessageController {
 			model.addAttribute("msg", "로그아웃 되었습니다.");
 			model.addAttribute("url","/member/memberLogin");
 		}
-		else if(msgFlag.equals("/message/unSafeLoad")) {
+		else if(msgFlag.equals("unSafeLoad")) {
 			model.addAttribute("msg", "잘못된 접근입니다. 확인해주세요.");
 			model.addAttribute("url","/");
 		}
-		else if(msgFlag.equals("/message/noLoginLoad")) {
+		else if(msgFlag.equals("noLoginLoad")) {
 			model.addAttribute("msg", "로그인 해주십시오");
 			model.addAttribute("url","/member/memberLogin");
 		}
-		else if(msgFlag.equals("/message/noLevel2")) {
+		else if(msgFlag.equals("noLevel2")) {
 			model.addAttribute("msg", "정회원 이상만 사용가능합니다. 확인해주세요");
 			model.addAttribute("url","/member/login/memberMain");
 		}
-		else if(msgFlag.equals("/message/noLevel1")) {
+		else if(msgFlag.equals("noLevel1")) {
 			model.addAttribute("msg", "우수회원 이상만 사용가능합니다. 확인해주세요");
 			model.addAttribute("url","/member/login/memberMain");
 		}
-		else if(msgFlag.equals("/message/wrongMid")) {
+		else if(msgFlag.equals("wrongMid")) {
 			model.addAttribute("msg", "입력하신 아이디가 틀렸습니다. 다시 확인해 주세요.");
 			model.addAttribute("url","/member/memberPwdFind");
 		}
-		else if(msgFlag.equals("/message/wrongMail")) {
+		else if(msgFlag.equals("wrongMail")) {
 			model.addAttribute("msg", "입력하신 이메일이 틀렸습니다. 다시 확인해 주세요.");
 			model.addAttribute("url","/member/memberPwdFind");
 		}
-		else if(msgFlag.equals("/message/memberTempPwdOk")) {
+		else if(msgFlag.equals("memberTempPwdOk")) {
 			model.addAttribute("msg", "임시비밀번호가 발급되었습니다");
 			model.addAttribute("url","/member/memberLogin");
 		}
-		else if(msgFlag.equals("/message/memberTempPwdNo")) {
+		else if(msgFlag.equals("memberTempPwdNo")) {
 			model.addAttribute("msg", "임시 비밀번호 발급에 실패하였습니다.");
 			model.addAttribute("url","/member/memberPwdFind");
 		}
-		else if(msgFlag.equals("/message/memberPwdUpdateOk")) {
+		else if(msgFlag.equals("memberPwdUpdateOk")) {
 			model.addAttribute("msg", "비밀번호가 변경되었습니다. 변경된 비밀번호로 로그인 해주십시오.");
 			model.addAttribute("url","/member/memberLogin");
 		}
+		else if(msgFlag.equals("fileUploadOk")) {
+			model.addAttribute("msg", "파일이 업로드 되었습니다.");
+			model.addAttribute("url","/study/fileUpload/fileUploadform");
+		}
+		else if(msgFlag.equals("fileUploadNo")) {
+			model.addAttribute("msg", "파일이 업로드되지 않았습니다.");
+			model.addAttribute("url","/study/fileUpload/fileUploadform");
+		}
+		else if(msgFlag.equals("memberPwdCheckNo")) {
+			model.addAttribute("msg", "비밀번호가 틀렸습니다. 다시 확인해 주세요");
+			model.addAttribute("url","/member/memberPwdCheck");
+		}
+		else if(msgFlag.equals("memberNickNameNo")) {
+			model.addAttribute("msg", "닉네임이 잘못되었습니다. 정보를 확인해주세요.");
+			model.addAttribute("url","/member/memberUpdate");
+		}
+		else if(msgFlag.equals("memberUpdateOk")) {
+			model.addAttribute("msg", "회원 정보 수정에 성공하였습니다.");
+			model.addAttribute("url","/member/login/memberMain");
+		}
+		else if(msgFlag.equals("memberUpdateNo")) {
+			model.addAttribute("msg", "회원 정보 수정에 실패하였습니다.");
+			model.addAttribute("url","/member/memberUpdate");
+		}
+		else if(msgFlag.equals("memberDelete")) {
+			model.addAttribute("msg", "회원탈퇴되었습니다. 향후 30일간은 동일한 아이디로 가입하실 수 없습니다. 안녕히 가십시오.");
+			model.addAttribute("url","/");
+		}
+		else if(msgFlag.equals("memberDelLogin")) {
+			model.addAttribute("msg", "탈퇴신청한 계정입니다. 탈퇴신청일 30일이 지나면 완전히 계정이 삭제되며, 그 동안 로그인 하실 수 없습니다.");
+			model.addAttribute("url","/");
+		}
+	
 		
 
 		

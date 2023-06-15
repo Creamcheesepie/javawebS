@@ -1,6 +1,7 @@
 package com.spring.javawebS;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javawebS.service.MemberService;
 import com.spring.javawebS.vo.MemberVO;
@@ -67,7 +69,12 @@ public class MemberController {
 			HttpSession session,
 			HttpServletResponse response
 			) {
+		
 		MemberVO vo = memberService.getMidCheck(mid);
+		if(vo.getUserDel().equals("ok")) {
+			return "redirect:/message/memberDelLogin";
+		}
+		
 		
 		if(vo != null && vo.getUserDel().equals("no") && bCryptPasswordEncoder.matches(pwd, vo.getPwd())) {
 			//회원이 인증처리된 경우? strLevel, Session에 저장, 쿠키저장, 방문자수, 방문포인트 증가...
@@ -81,6 +88,7 @@ public class MemberController {
 			session.setAttribute("strLevel", strLevel);
 			session.setAttribute("sMid", vo.getMid() );
 			session.setAttribute("sNickName", vo.getNickName());
+			session.setAttribute("sPhoto", vo.getPhoto() );
 			
 			if(idSave.equals("on")) {
 				Cookie cookie = new Cookie("cMid",mid);
@@ -123,7 +131,7 @@ public class MemberController {
 	
 	
 	@RequestMapping(value = "/memberJoinOk" , method = RequestMethod.POST)
-	public String memberJoinOkPost(MemberVO vo) {
+	public String memberJoinOkPost(MultipartFile fName,MemberVO vo) {
 		
 	//중복체크
 	if(memberService.getMidCheck(vo.getMid())!=null) return "redirect:/message/midCheckNo";
@@ -132,10 +140,9 @@ public class MemberController {
 	//비밀번호 암호화
 	vo.setPwd(bCryptPasswordEncoder.encode(vo.getPwd()));
 	
-	//사진파일이 업로드 되었따면 사진파일을 서버 파일시스템에 저장시켜준다.
-	
+	//사진파일이 업로드 되었따면 사진파일을 서버 파일시스템에 저장시켜준다.(서비스객체에서 수행하기)
 	//체크가 완료되었다면 vo에 담긴자료를 DB에 저장한다.
-	int res = memberService.setMemberJoinOk(vo);
+	int res = memberService.setMemberJoinOk(vo , fName);
 	if(res==1) return "redirect:/message/memberJoinNo";
 	else return "redirect:/message/memberJoinOk";
 	
@@ -301,6 +308,14 @@ public class MemberController {
 		return "member/memberList";
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/memberSearch", method=RequestMethod.POST)
+	public List<MemberVO> memberSearchPost(Model model,String keyWord, String searchStr) {
+		List<MemberVO> vos = memberService.getMemberSearch(keyWord,searchStr);
+		System.out.println(keyWord);
+		return vos;
+	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/memberDetailInfo", method=RequestMethod.POST)
@@ -309,7 +324,67 @@ public class MemberController {
 		return vo;
 	}
 	
-
+	
+	@RequestMapping(value = "/memberPwdCheck", method=RequestMethod.GET)
+	public String memberPwdCheckGet(Model model) {
+		
+		return "member/memberPwdCheck";
+	}
+	
+	@RequestMapping(value = "/memberPwdCheck", method=RequestMethod.POST)
+	public String memberPwdCheckPost(String mid, String pwd,Model model) {
+		MemberVO vo = memberService.getMidCheck(mid);
+		
+		if(bCryptPasswordEncoder.matches(pwd, vo.getPwd())) {
+			model.addAttribute("vo", vo);
+			return "member/memberUpdate";
+		}
+		else {
+			return "redirect:/message/memberPwdCheckNo";
+		}
+		
+	}
+	
+	@RequestMapping(value = "/memberUpdate", method=RequestMethod.GET)
+	public String membeUpdateGet(Model model,HttpSession session) {
+		String mid = (String)session.getAttribute("sMid");
+		MemberVO vo = memberService.getMidCheck(mid);
+		model.addAttribute("vo",vo);
+		return "member/memberPwdCheck";
+	}
+	
+	@RequestMapping(value = "/memberUpdateOk", method=RequestMethod.POST)
+	public String memberUpdateOkPost(MemberVO vo,MultipartFile fName,HttpSession session) {
+		//닉네임 체크
+		String nickName = (String)session.getAttribute("sNickName");
+		System.out.println(vo);
+		
+		
+		if(memberService.getNickNameCheck(vo.getNickName()) != null && !nickName.equals(vo.getNickName())) {
+			return "redirect:/message/memberNickNameNo";
+		}
+		
+		int res = memberService.setMemberUpdateOk(fName,vo);
+		
+		if(res == 1) {
+			session.setAttribute("sNickName", vo.getNickName());
+			return "redirect:/message/memberUpdateOk";
+		}
+		else {
+			return "redirect:/message/memberUpdateNo";
+		}
+	}
+	
+	@RequestMapping(value = "/memberDelete", method=RequestMethod.GET)
+	public String membeUpdateGet(HttpSession session) {
+		String mid = (String)session.getAttribute("sMid");
+		
+		memberService.setMemberDelete(mid);
+		
+		session.invalidate();
+		
+		return "redirect:/message/memberDelete";
+	}
 
 
 	

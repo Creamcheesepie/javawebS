@@ -31,4 +31,13 @@ public interface MemberDAO {
 
 	public MemberVO getMemberDetailInfo(@Param("idx") int idx);
 
+
+	public List<MemberVO> getMemberSearch(@Param("keyWord") String keyWord,@Param("searchStr") String searchStr);
+
+
+	public void setMemberUpdateOk(@Param("vo") MemberVO vo);
+
+
+	public void setMemberDelete(@Param("mid") String mid);
+
 }

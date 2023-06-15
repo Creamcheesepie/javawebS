@@ -21,6 +21,7 @@
 						<a href="${ctp}/study/mail/mailForm" class="w3-bar-item w3-button">email연습</a>
 						<a href="${ctp}/study/uuid/uuidForm" class="w3-bar-item w3-button">uuid연습</a>
 						<a href="${ctp}/study/ajax/ajaxForm" class="w3-bar-item w3-button">ajax연습</a>
+						<a href="${ctp}/study/fileUpload/fileUploadform" class="w3-bar-item w3-button">파일업로드 연습</a>
 					</div>
 				</div>
 				<div class="w3-dropdown-hover w3-hide-small">
@@ -29,8 +30,8 @@
 					<div class="w3-dropdown-content w3-bar-block w3-card-4">
 						<a href="${ctp}/member/memberList" class="w3-bar-item w3-button">회원목록</a> 
 						<a href="${ctp}/member/memberPwdUpdate" class="w3-bar-item w3-button">비밀번호 변경</a> 
-						<a href="${ctp}/member/memberUpdate" class="w3-bar-item w3-button">정보수정</a>
-						<a href="javascript:memberDelete()" class="w3-bar-item w3-button">탈퇴</a>
+						<a href="${ctp}/member/memberPwdCheck" class="w3-bar-item w3-button">정보수정</a>
+						<a href="javascript:memberDelete('${sMid}')" class="w3-bar-item w3-button">탈퇴</a>
 						<c:if test="${sLevel==0}">
 						<a href="${ctp}/admin/adminPage" class="w3-bar-item w3-button">관리자</a>
 						</c:if>
@@ -45,9 +46,7 @@
 				<a href="${ctp}/member/memberInfo" class="w3-bar-item w3-button w3-padding-large w3-hide-small">회원정보</a>
 				<a href="${ctp}/member/memberLogout" class="w3-bar-item w3-button w3-padding-large w3-hide-small">로그아웃</a>
 			</c:if>
-			<a href="javascript:void(0)"
-				class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i
-				class="fa fa-search"></i></a>
+			<a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-search"></i></a>
 		</div>
 	</div>
 
@@ -65,3 +64,24 @@
 			<a href="${ctp}/study/password/aria"  class="w3-bar-item w3-button w3-padding-large">암호화(ARIA)</a> 
 			<a href="${ctp}/study/password/bCryptPassword"  class="w3-bar-item w3-button w3-padding-large">암호화(MD5)</a>
 	</div>
+	<script>
+		'use strict'
+		
+		function memberDelete(mid){
+			let ans = confirm("정말로 탈퇴하시겠습니까?");
+			
+			if(!ans){
+				return false;
+			}
+			else{
+				let ans = confirm("정말로 탈퇴하시겠습니까?? 이후 30일 동안 동일한 아이디로 재가입 하실 수 없습니다!");
+				if(!ans){
+					return false;					
+				}
+				else{
+					location.href="${ctp}/member/memberDelete";
+				}
+			}
+			
+		}
+	</script>

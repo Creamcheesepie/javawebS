@@ -14,9 +14,10 @@
 				url:"${ctp}/member/memberDetailInfo",
 				data : {idx:idx},
 				success:function(vo){
-					let str = "<h3>"+vo.nickName+"님 상세정보<h3>";
+					let str = "<h3>"+vo.nickName+"님 상세정보</h3>";
 					str += '아이디 : '+vo.mid+'<br/>';
 					str += '닉네임 : '+vo.nickName+'<br/>';
+					str += '이름 : '+vo.name+'<br/>';
 					str += '성별 : '+vo.gender+'<br/>';
 					str += '생일 : '+vo.birthday+'<br/>';
 					str += '전화번호 : '+vo.tell+'<br/>';
@@ -39,6 +40,43 @@
 				}
 			})
 		}
+		
+		function memberSearch(){
+			let keyWord= $("#keyWord").val();
+			let searchStr = $("#searchStr").val();
+			
+			$.ajax({
+				type:"post",
+				data:{keyWord:keyWord,searchStr:searchStr},
+				url:"${ctp}/member/memberSearch",
+				success:function(vos){
+					let str = "<h3>"+searchStr+" 검색결과</h3><hr/>";
+					if(vos!=""){
+						for(let i=0 ; i<vos.length;i++){
+							str += '아이디 : '+vos[i].mid+'<br/>';
+							str += '닉네임 : '+vos[i].nickName+'<br/>';
+							str += '이름 : '+vos[i].name+'<br/>';
+							str += '이메일 : '+vos[i].email+'<br/>';
+							str += '직업 : '+vos[i].job+'<br/>';
+							str += '등급 : '+vos[i].level+'<br/>';
+							str += '가입일자 : '+vos[i].signInDate+'<br/>';
+							str += '최종로그인시간 : '+vos[i].lastDate+'<br/><hr/>';
+						}
+						$('#detailShow').html(str);
+						$('#detailInfo').modal('show');
+					}
+					else{
+						str+="검색결과가 없습니다.";
+					}
+					
+				}
+				
+				
+				
+			})
+		}
+		
+		
 	</script>
 </head>
 <body>
@@ -46,6 +84,25 @@
 <jsp:include page="/WEB-INF/views/include/slide2.jsp"/>
 <p><br/></p>
 <div class="container">
+	<form method="post">
+	<div class="row">
+		<div class="col-4"></div>
+		<div class="col-2 text-right">
+			<select name="keyWord" id="keyWord" class="form-control">
+				<option value="mid" selected>아이디</option>			
+				<option value="nickName">닉네임</option>			
+				<option value="name">이름</option>				
+			</select>
+		</div>
+		<div class="col-4">
+			<input type="text" id="searchStr" name="searchStr" placeholder="검색어를 입력해주세요" class="form-control"/>
+		</div>
+		<div class="col-2">
+			<input type="button" value="검색" onclick="memberSearch()" class="btn btn-success form-control"/>
+		</div>
+	</div>
+	</form>
+	<hr/>
 		<div class="row text-center">
 			<div class="col-2">이름</div>
 			<div class="col-2">아이디</div>
