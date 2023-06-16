@@ -8,7 +8,7 @@
 				href="http://localhost:9090/javawebS" class="w3-bar-item w3-button w3-padding-large">HOME</a> 
 			<a href="${ctp}/guest/guestList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">guest</a>
 			<c:if test="${sLevel <=3 }">
-				<a href="#" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Board</a>
+				<a href="${ctp}/board/boardList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Board</a>
 				<a href="#contact" class="w3-bar-item w3-button w3-padding-large w3-hide-small">pds</a>
 				
 				<div class="w3-dropdown-hover w3-hide-small">

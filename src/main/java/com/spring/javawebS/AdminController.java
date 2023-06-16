@@ -17,9 +17,9 @@ public class AdminController {
 		return "admin/adminPage";
 	}
 	
-	@RequestMapping("/member")
+	@RequestMapping("/memberList")
 	public String adminMemberGet() {
-		return "admin/
+		return "admin/adminMemberList";
 	}
 	
 	

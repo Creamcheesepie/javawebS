@@ -141,6 +141,14 @@ public class MessageController {
 			model.addAttribute("msg", "탈퇴신청한 계정입니다. 탈퇴신청일 30일이 지나면 완전히 계정이 삭제되며, 그 동안 로그인 하실 수 없습니다.");
 			model.addAttribute("url","/");
 		}
+		else if(msgFlag.equals("boardInputOk")) {
+			model.addAttribute("msg", "게시글 등록에 성공하였습니다. ");
+			model.addAttribute("url","/board/boardList");
+		}
+		else if(msgFlag.equals("boardInputNo")) {
+			model.addAttribute("msg", "게시글 등록에 실패하였습니다. ");
+			model.addAttribute("url","/board/boardInput");
+		}
 	
 		
 
