@@ -11,7 +11,7 @@ public interface BoardService {
 
 	public int setBoardInput(BoardVO vo);
 
-	public void imgCheck(String content);
+	public void imgCheck(String content, String string);
 
 	public BoardVO getBoardContent(int idx);
 

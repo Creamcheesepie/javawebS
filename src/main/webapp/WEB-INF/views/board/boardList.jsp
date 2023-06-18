@@ -34,13 +34,14 @@
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/include/nav.jsp"/>
+<jsp:include page="/WEB-INF/views/include/slide2.jsp"/>
 <p><br/></p>	
 	<div class="container">
 		<h2 class="text-center">게시판 리스트</h2>
 		<table class="table table-borderless">
 			<tr>
 				<td>
-					<c:if test="${sLevel==0 ||sLevel>1}">
+					<c:if test="${sLevel==0 ||sLevel<2}">
 						<a href="${ctp}/board/boardInput" class="btn btn-primary btn-sm">글쓰기</a>
 					</c:if>
 				

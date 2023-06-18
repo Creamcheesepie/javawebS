@@ -52,7 +52,7 @@ public class BoardController {
 	@RequestMapping(value = "/boardInput", method = RequestMethod.POST)
 	public String boardInputPost(BoardVO vo) {
 		//content에 이미지가 저장되어 있다면 저장된 이미지만 골라서 /resources/data/board 폴더에 저장한다.
-		boardService.imgCheck(vo.getContent());
+		boardService.imgCheck(vo.getContent(),"board");
 		
 		//이미지들의 모든 복사처리가 끝났다면 ckeditor의 경로를 board로 바꿔준다.
 		vo.setContent(vo.getContent().replace("/data/", "/data/board/"));

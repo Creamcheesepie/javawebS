@@ -37,7 +37,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void imgCheck(String content) {
+	public void imgCheck(String content,String sector) {
 		
 	
 		
@@ -48,7 +48,12 @@ public class BoardServiceImpl implements BoardService {
 		String realpath = request.getSession().getServletContext().getRealPath("/resources/data/");
 		
 		int position = 20;
+		String index = "data/";
+		String tempStr = content.substring(content.indexOf(index)+index.length());
 		String nextImg = content.substring(content.indexOf("src=\"/")+position);
+		
+		System.out.println("새방식 : " + tempStr);
+		System.out.println("이전방식 : " + nextImg);
 		boolean sw = true;
 		
 		while(sw) {
