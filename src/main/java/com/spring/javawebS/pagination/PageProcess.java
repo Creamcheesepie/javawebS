@@ -20,10 +20,14 @@ public class PageProcess {
 		int totRecCnt = 0;
 		
 		if(section.equals("guest")) totRecCnt = guestDAO.totRecCnt();
-		else if(section.equals("board")) totRecCnt = boardDAO.totRecCnt();
+		else if(section.equals("board")) {
+			if(part.equals(""))totRecCnt = boardDAO.totRecCnt();
+			else {
+				String search = part;
+			}
+		}
 		//else if(section.equals("member")) totRecCnt = memberDAO.totRecCnt();
-		
-		totRecCnt = guestDAO.totRecCnt();
+
 		
 		int totPage = (totRecCnt%pageSize)==0?totRecCnt/pageSize : (totRecCnt/pageSize)+1;
 		int startIndexNo = (pag-1) * pageSize;
@@ -43,6 +47,38 @@ public class PageProcess {
 		pageVO.setBlockSize(blockSize);
 		pageVO.setLastBlock(lastBlock);
 		pageVO.setPart(part);
+		
+		
+		return pageVO;
+	}
+
+	public PageVO totRecCntSearch(int pag, int pageSize, String secttion, String search, String searchString) {
+		PageVO pageVO = new PageVO();
+		
+		int totRecCnt = boardDAO.totRecCntSearch(search, searchString);
+		
+	
+		//else if(section.equals("member")) totRecCnt = memberDAO.totRecCnt();
+
+		
+		int totPage = (totRecCnt%pageSize)==0?totRecCnt/pageSize : (totRecCnt/pageSize)+1;
+		int startIndexNo = (pag-1) * pageSize;
+		int curScrStartNo = totRecCnt - startIndexNo;
+		
+		int blockSize = 3;
+		int curBlock = (pag-1)/blockSize;
+		int lastBlock =(totPage-1)/blockSize;
+		
+		pageVO.setPag(pag);
+		pageVO.setPageSize(pageSize);
+		pageVO.setTotRecCnt(totRecCnt);
+		pageVO.setTotPage(totPage);
+		pageVO.setStartIndexNo(startIndexNo);
+		pageVO.setCurBlock(curBlock);
+		pageVO.setCurScrStartNo(curScrStartNo);
+		pageVO.setBlockSize(blockSize);
+		pageVO.setLastBlock(lastBlock);
+		
 		
 		
 		return pageVO;

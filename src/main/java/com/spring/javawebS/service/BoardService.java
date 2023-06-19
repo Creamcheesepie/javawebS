@@ -21,6 +21,17 @@ public interface BoardService {
 
 	public void setBoardUpDown(int idx, String mid, String sector);
 
+	public List<BoardVO> getBoardSearchResult(String searchString, String search, int startIndexNo, int pageSize);
+
+	public void imgDelete(String content);
+
+	public int setBoardDelete(int idx);
+
+	public void imgUpdate(String content, String root);
+
+	public int getboardUpdate(BoardVO vo);
+
+
 
 
 }

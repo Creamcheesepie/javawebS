@@ -132,6 +132,90 @@ public class BoardServiceImpl implements BoardService {
 		}
 	}
 
+	@Override
+	public List<BoardVO> getBoardSearchResult(String searchString, String search, int startIndexNo, int pageSize) {
+		
+		return boardDAO.getBoardSearchResult(searchString, search,startIndexNo, pageSize);
+	}
+
+	@Override
+	public void imgDelete(String content) {
+		
+		//content안에 그림파일이 존재한다면 그림을 /data/board/폴더로 복사처리한다. 없으면 돌려보낸다.
+		if(content.indexOf("src=\"/") == -1) return;
+		
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		String realpath = request.getSession().getServletContext().getRealPath("/resources/data/");
+		System.out.println("realpath : " + realpath);
+		String index = "board/";
+		String nextImg = content.substring(content.indexOf(index)+index.length());
+
+		System.out.println("파일명 " + nextImg);
+		boolean sw = true;
+		
+		while(sw) {
+			String imgFile = nextImg.substring(0, nextImg.indexOf("\"")); //그림 파일명만 꺼내오기
+			
+			String ofPath = realpath+"board/"+imgFile;
+			
+			fileDelete(ofPath); //board 폴더의 그림을 삭제처리 한다.
+			
+			if(nextImg.indexOf("src=\"/") == -1) sw = false;
+			else {
+				nextImg = nextImg.substring(content.indexOf(index)+index.length());
+			}
+			
+	}
+		
+	}
+
+	public void fileDelete(String ofPath) {
+		File delFile = new File(ofPath);
+		if(delFile.exists()) delFile.delete();
+	}
+
+	@Override
+	public int setBoardDelete(int idx) {
+		
+		return boardDAO.setBoardDelete(idx);
+	}
+
+	@Override
+	public void imgUpdate(String content, String root) {
+		//content안에 그림파일이 존재한다면 그림을 /data/board/폴더로 복사처리한다. 없으면 돌려보낸다.
+		if(content.indexOf("src=\"/") == -1) return;
+		
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		String realpath = request.getSession().getServletContext().getRealPath("/resources/data/");
+		
+		int position = 20;
+		String index = "board/";
+		String nextImg = content.substring(content.indexOf(index)+index.length());
+		boolean sw = true;
+		
+		while(sw) {
+			String imgFile = nextImg.substring(0, nextImg.indexOf("\""));
+			
+			String ofPath = realpath+"board/"+imgFile;
+			String cfPath = realpath+"ckeditor/"+imgFile;
+			
+			fileCopyCheck(ofPath, cfPath); //ckeditor 폴더의 그림파일을 board 폴더 위치로 복사처리한다.
+			
+			if(nextImg.indexOf("src=\"/") == -1) sw = false;
+			else {
+				nextImg = nextImg.substring(content.indexOf(index)+index.length());
+			}
+		
+		}
+	}
+
+	@Override
+	public int getboardUpdate(BoardVO vo) {
+		
+		return boardDAO.getboardUpdate(vo);
+	}
+
+
 	
 	
 }

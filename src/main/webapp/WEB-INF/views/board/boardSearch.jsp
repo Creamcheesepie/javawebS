@@ -13,7 +13,7 @@
 	
 	function pageCheck(){
 		let pageSize = document.getElementById("pageSize").value;
-		location.href="${ctp}/board/boardList?pag=${pageVO.pag}&pageSize="+pageSize;
+		location.href="${ctp}/board/boardSearch?nowPage=${pageVO.pag}&pageSize="+pageSize;
 	}
 	
 	function searchCheck(){
@@ -37,23 +37,13 @@
 <jsp:include page="/WEB-INF/views/include/slide2.jsp"/>
 <p><br/></p>	
 	<div class="container">
-		<h2 class="text-center">게시판 리스트</h2>
-		<table class="table table-borderless">
+		<h2 class="text-center">게시판 검색 결과</h2>
+		<div>
+			<font color="blue">${searchTitle}</font>(으)로 <font color="res">${searchString}</font>(을)를 검색한 결과 <font color="yellowgreen">${searchCnt}</font>건이 검색되었습니다.
+		</div>
+		<table class="table">
 			<tr>
-				<td>
-					<c:if test="${sLevel==0 ||sLevel<2}">
-						<a href="${ctp}/board/boardInput" class="btn btn-primary btn-sm">글쓰기</a>
-					</c:if>
-				
-				</td>
-				<td>
-					<select name="pageSize" id="pageSize" onchange="pageCheck()">
-						<option <c:if test="${pageVO.pageSize==5}">selected</c:if>>5</option>
-						<option <c:if test="${pageVO.pageSize==10}">selected</c:if>>10</option>
-						<option <c:if test="${pageVO.pageSize==15}">selected</c:if>>15</option>
-						<option <c:if test="${pageVO.pageSize==20}">selected</c:if>>20</option>
-					</select>건 표시
-				</td>
+				<td><a href="${ctp}/board/boardList?nowPage=${pageVO.pag}&pageSize=${pageSize}" class="btn btn-sm btn-info">돌아가기</a></td>
 			</tr>
 		</table>
 		<table class="table table-hover text-center">
@@ -65,24 +55,15 @@
 				<th>조회수</th>
 				<th>추천수</th>
 			</tr>
-			<c:set var="curScrStartNo" value="${pageVO.curScrStartNo}"/>
+			<c:set var="searchCnt" value="${searchCount}"/>
 			<c:forEach var="vo" items="${vos}" varStatus="st">
 				<%-- <c:if test="${vo.openSw eq'ok'}"> --%>
 					<tr>
-						<td>${curScrStartNo}</td>
+						<td>${searchCnt}</td>
 						<td>
-							
-							<c:if test="${vo.openSw == 'ok' ||sLevel ==0||sMid==vo.mid}">
-							<c:if test="${vo.hour_diff<=24}"><img src="${ctp}/board/new.gif"/></c:if>
-							<a href="${ctp}/board/boardContent?idx=${vo.idx}&pag=${pageVO.pag}&pageSize=${pageVO.pageSize}">${vo.title}(${vo.replyCount})</a>
+							<c:if test="${vo.hour_diff<=24}"><img src="${ctp}/images/new.gif"/></c:if>
+							<a href="${ctp}/board/boardContent?flag=search&search=${search}&searchString=${searchString}&idx=${vo.idx}&pag=${pageVO.pag}&pageSize=${pageSize}">${vo.title}</a>
 							<c:if test="${vo.hour_diff<=24}">&nbsp;<span class="badge badge-warning text-white">new!</span></c:if>
-							</c:if>
-							<c:if test="${vo.openSw != 'ok'&&sLevel !=0&&sMid!=vo.mid}">
-							<c:if test="${vo.hour_diff<=24}"><img src="${ctp}/board/new.gif"/></c:if>
-							${vo.title}(비공개)
-							<c:if test="${vo.hour_diff<=24}">&nbsp;<span class="badge badge-warning text-white">new!</span></c:if>
-							</c:if>
-							
 						</td>
 						<td>${vo.nickName}</td>
 						<td>
@@ -103,20 +84,20 @@
 						<td>${vo.readNum}</td>
 						<td>${vo.good}</td>
 					</tr>
-					<c:set var="curScrStartNo" value="${pageVO.curScrStartNo-1}"/>
+					<c:set var="searchCnt" value="${searchCnt-1}"/>
 				<%-- </c:if> --%>
 			</c:forEach>
 		</table>
 		<!-- 블록페이지 -->
 		<ul class="pagination text-center justify-content-center border-secondary pagination-sm">	
-				<c:if test="${pageVO.pag>1}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/board/boardList?pageSize=${pageVO.pageSize}&pag=1">첫페이지</a></li></c:if>
-				<c:if test="${pageVO.curBlock>0}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/board/boardList?pageSize=${pageVO.pageSize}&pag=${(pageVO.curBlock-1)*pageVO.blockSize+1}">이전블록</a></li></c:if>
-				<c:forEach var="i" begin="${pageVO.curBlock*pageVO.blockSize+1}" end="${pageVO.curBlock*pageVO.blockSize + pageVO.blockSize}" varStatus="st">
+				<c:if test="${pageVO.pag>1}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/board/boardSearch?pageSize=${pageVO.pageSize}&pag=1&search=${search}&searchString=${searchString}">첫페이지</a></li></c:if>
+				<c:if test="${pageVO.curBlock>0}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/board/boardSearch?pageSize=${pageVO.pageSize}&pag=${(pageVO.curBlock-1)*pageVO.blockSize+1}&search=${search}&searchString=${searchString}">이전블록</a></li></c:if>
+				<c:forEach var="i" begin="${pageVO.curBlock*pageVO.blockSize+1}" end="${pageVO.curBlock*pageVO.blockSize + pageVO.blockSize}&search=${search}&searchString=${searchString}" varStatus="st">
 					<c:if test="${i<=pageVO.totPage && i== pageVO.pag}"><li class="page-item active bg-secondary"><a class="page-link bg-secondary" href="#">${i}</a></li></c:if>
-					<c:if test="${i<=pageVO.totPage && i!= pageVO.pag}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/board/boardList?pageSize=${pageVO.pageSize}&pag=${i}">${i}</a></li></c:if>
+					<c:if test="${i<=pageVO.totPage && i!= pageVO.pag}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/board/boardSearch?pageSize=${pageVO.pageSize}&pag=${i}&search=${search}&searchString=${searchString}">${i}</a></li></c:if>
 				</c:forEach>
-				<c:if test="${pageVO.curBlock<pageVO.lastBlock}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/board/boardList?pageSize=${pageVO.pageSize}&pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}">다음블록</a></li></c:if>
-				<c:if test="${pageVO.pag<pageVO.totPage}"><li class="page-item"><a class="page-link  text-secondary" href="${ctp}/board/boardList?pageSize=${pageVO.pageSize}&pag=${pageVO.totPage}">마지막페이지</a></li></c:if>
+				<c:if test="${pageVO.curBlock<pageVO.lastBlock}"><li class="page-item"><a class="page-link text-secondary" href="${ctp}/board/boardSearch?pageSize=${pageVO.pageSize}&pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}&search=${search}&searchString=${searchString}">다음블록</a></li></c:if>
+				<c:if test="${pageVO.pag<pageVO.totPage}"><li class="page-item"><a class="page-link  text-secondary" href="${ctp}/board/boardSearch?pageSize=${pageVO.pageSize}&pag=${pageVO.totPage}&search=${search}&searchString=${searchString}">마지막페이지</a></li></c:if>
 			</ul>
 	</div>
 	<br/>
@@ -132,7 +113,7 @@
 			<input type="text" name="searchString" id="searchString"/>
 			<input type="button" value="검색" onclick="searchCheck()" class="btn btn-success btn-sm"/>
 			<input type="hidden" name="pag" value="${pageVO.pag}"/>
-			<input type="hidden" name="pageSize" value="${pageVO.pageSize}"/>
+			<input type="hidden" name="pageSize" value="${pageSize}"/>
 		</form>
 	</div>
 <p><br/></p>

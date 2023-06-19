@@ -14,13 +14,13 @@
 	'use strict';
 	
 	function goodCheck(){
-		location.href="${ctp}/board/boardGoodCheck?idx=${vo.idx}&pageSize=${pageSize}&pag=${pag}";
+		location.href="${ctp}/board/boardGoodCheck?idx=${vo.idx}&pageSize=${pageVO.pageSize}&pag=${pageVO.pag}";
 		
 	}
 	
 	function boardDelete(){
 		let ans = confirm("이 글을 삭제하시겠습니까?");
-		if(ans)location.href="${ctp}/board/boardDelete?idx=${vo.idx}&pageSize=${pageSize}&pag=${pag}&flag=${flag}&nickName=${vo.nickName}";
+		if(ans)location.href="${ctp}/board/boardDelete?idx=${vo.idx}&pageSize=${pageVO.pageSize}&pag=${pageVO.pag}&flag=${flag}&nickName=${vo.nickName}";
 		
 	}
 	

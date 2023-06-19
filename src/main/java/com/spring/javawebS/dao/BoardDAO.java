@@ -30,4 +30,13 @@ public interface BoardDAO {
 
 	public void setBoardGoodMemberInput(@Param("idx") int idx,@Param("mid")  String mid, @Param("sector") String sector);
 
+	public int totRecCntSearch(@Param("search")String search,@Param("searchString") String searchString);
+
+	public List<BoardVO> getBoardSearchResult(@Param("searchString") String searchString,@Param("search") String search,@Param("startIndexNo") int startIndexNo,@Param("pageSize") int pageSize);
+
+	public int setBoardDelete(@Param("idx") int idx);
+
+	public int getboardUpdate(@Param("vo") BoardVO vo);
+
+
 }

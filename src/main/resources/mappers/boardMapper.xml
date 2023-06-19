@@ -22,6 +22,13 @@
 		select * from goodCnt2 where mid = #{mid} and idx = #{idx} and sector = #{sector} ;
 	</select>
 	
+	<select id="totRecCntSearch" resultType="int">
+		select count(*) from board2 where ${search} like concat('%',#{searchString},'%');
+	</select>
+	
+	<select id="getBoardSearchResult" resultType="com.spring.javawebS.vo.BoardVO">
+		select * from board2 where ${search} like concat('%',#{searchString},'%') order by idx desc limit #{startIndexNo},#{pageSize};
+	</select>
 	
 	
 	
@@ -30,6 +37,9 @@
 	<insert id="setBoardInput">
 		insert into board2 values (default, #{vo.mid} , #{vo.nickName} , #{vo.title} , #{vo.email} , #{vo.homePage} , #{vo.content} , default , #{vo.hostIp} , #{vo.openSw} , default , default );
 	</insert>
+	
+	
+	
 	
 	<insert id="setBoardGoodMemberInput">
 		insert into goodCnt2 values (#{sector},#{idx},#{mid},default);
@@ -45,11 +55,19 @@
 		update board2 set readNum = readNum+1 where idx = #{idx};
 	</update>
 	
+	<update id="getboardUpdate">
+		update board2 set title=#{vo.title}, email=#{vo.email},content=#{vo.content},hostIp=#{vo.hostIp},openSw=#{vo.openSw} where idx = #{vo.idx};
+	</update>
+	
 	
 	
 	
 	<delete id="setBoardGoodMemberDelete">
 		delete from goodCnt2 where sector = #{sector} and idx = #{idx} and mid= #{mid};
+	</delete>
+	
+	<delete id="setBoardDelete">
+		delete from board2 where idx = #{idx};
 	</delete>
 	
 	

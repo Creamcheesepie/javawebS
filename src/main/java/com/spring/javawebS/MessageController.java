@@ -5,13 +5,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/message")
 public class MessageController {
 	
 	@RequestMapping(value="/{msgFlag}" , method = RequestMethod.GET)
-	public String boardListGet(@PathVariable String msgFlag,Model model) {
+	public String boardListGet(@PathVariable String msgFlag,Model model,
+			@RequestParam(name="pag",defaultValue="1",required=false)int pag,
+			@RequestParam(name="pageSize",defaultValue="5",required=false)int pageSize
+			
+			) {
 		
 		if(msgFlag.equals("guestInputOk")) {
 			model.addAttribute("msg", "방명록 작성완료!");
@@ -149,7 +154,20 @@ public class MessageController {
 			model.addAttribute("msg", "게시글 등록에 실패하였습니다. ");
 			model.addAttribute("url","/board/boardInput");
 		}
-	
+		else if(msgFlag.equals("boardDeleteOk")) {
+			model.addAttribute("msg", "게시글이 삭제되었습니다.");
+			model.addAttribute("url","/board/boardList?pag="+pag+"&pageSize="+pageSize);
+		}
+		else if(msgFlag.equals("redirect:/message/boardUpdateOk")) {
+			model.addAttribute("msg", "게시글 수정에 성공하였습니다.");
+			model.addAttribute("url","/board/boardList?pag="+pag+"&pageSize="+pageSize);
+		}
+		else if(msgFlag.equals("redirect:/message/boardUpdateOk")) {
+			model.addAttribute("msg", "게시글 수정에 실패하였습니다.");
+			model.addAttribute("url","/board/boardList?pag="+pag+"&pageSize="+pageSize);
+		}
+		
+		
 		
 
 		
