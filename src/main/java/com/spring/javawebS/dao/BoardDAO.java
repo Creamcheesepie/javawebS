@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.spring.javawebS.vo.BoardGoodVO;
+import com.spring.javawebS.vo.BoardReplyVO;
 import com.spring.javawebS.vo.BoardVO;
 
 public interface BoardDAO {
@@ -37,6 +38,14 @@ public interface BoardDAO {
 	public int setBoardDelete(@Param("idx") int idx);
 
 	public int getboardUpdate(@Param("vo") BoardVO vo);
+
+	public String getMaxGroupId(@Param("boardIdx") int boardIdx);
+
+	public void setBoardReply(@Param("replyVO") BoardReplyVO replyVO);
+
+	public List<BoardReplyVO> getReplyList(@Param("boardIdx") int idx);
+
+	public void setBoardReplyUpdate(@Param("idx") int idx,@Param("content") String content,@Param("postIp") String postIp);
 
 
 }

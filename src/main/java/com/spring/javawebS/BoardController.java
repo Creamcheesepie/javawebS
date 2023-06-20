@@ -12,10 +12,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.javawebS.pagination.PageProcess;
 import com.spring.javawebS.pagination.PageVO;
 import com.spring.javawebS.service.BoardService;
+import com.spring.javawebS.vo.BoardReplyVO;
 import com.spring.javawebS.vo.BoardVO;
 
 @Controller
@@ -73,7 +75,7 @@ public class BoardController {
 				@RequestParam(name="pageSize",defaultValue="0",required=false) int pageSize,
 			Model model, HttpSession session
 			) {
-		
+		System.out.println(idx);
 		//글 조회수 1씩 증가시키기(조회수 중복방지 - 세션처리( board+ 고유번호)
 		ArrayList<String> contentIdx = (ArrayList<String>)session.getAttribute("sContentIdx");
 		if(contentIdx == null) {
@@ -86,20 +88,22 @@ public class BoardController {
 		}
 		session.setAttribute("sContentIdx", contentIdx);
 		
-		
+		//댓글가져오기
+		List<BoardReplyVO> replyVOS = boardService.getReplyList(idx);
 		BoardVO vo = boardService.getBoardContent(idx);
 		
 		
 		//이전글 다음글 가져오기
 		ArrayList<BoardVO> pnVOS = boardService.getPrevNaxt(idx);
-		System.out.println(idx);
-		System.out.println(pnVOS);
+	
+	
 		
 		model.addAttribute("pnVOS", pnVOS);
+		model.addAttribute("replyVOS", replyVOS);
 		model.addAttribute("vo", vo);
 		model.addAttribute("pag", pag);
 		model.addAttribute("pageSize", pageSize);
-		
+		System.out.println(idx);
 		
 		return "board/boardContent";
 	}
@@ -253,5 +257,53 @@ public class BoardController {
 		}
 		
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/boardReplyInput",method = RequestMethod.POST)
+	public String boardReplyInputPost(Model model,
+			BoardReplyVO replyVO,
+			@RequestParam(name="pag",defaultValue="0",required=false) int pag,
+			@RequestParam(name="pageSize",defaultValue="0",required=false) int pageSize	
+			) {
+		String strGroupId = boardService.getMaxGroupId(replyVO.getBoardIdx());
+		
+		replyVO.setLevel(0);
+		
+		//게시글의 댓글처리
+		if(strGroupId!=null) replyVO.setGroupId(Integer.parseInt(strGroupId)+1);
+		else replyVO.setGroupId(0);
+		
+		boardService.setBoardReply(replyVO);
+		
+		return "1";
+	}
+	
+	//댓글(대댓글 저장하기)
+	@ResponseBody
+	@RequestMapping(value = "/boardReplyInput2",method = RequestMethod.POST)
+	public String boardReplyInput2Post(BoardReplyVO replyVO) {
+		System.out.println(replyVO);
+		
+		replyVO.setLevel(replyVO.getLevel()+1);
+		boardService.setBoardReply(replyVO);
+		
+		return "1";
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/boardReplyUpdate",method = RequestMethod.POST)
+	public String boardReplyUpdatePost(
+			@RequestParam(name="idx",defaultValue="0",required=false) int idx,
+			@RequestParam(name="content",defaultValue="",required=false)String content,
+			@RequestParam(name="postIp",defaultValue="",required=false)String postIp
+			) {
+		System.out.println();
+		
+		boardService.setBoardReplyUpdate(idx,content,postIp);
+		
+		return "1";
+	}
+	
 
 }

@@ -42,13 +42,15 @@ create table board2Reply(
 	wDate			datetime default now(),						 /*댓글 작성일자*/
 	postIp		varchar(50) not null,							 /*댓글 올린 PC의 고유 ip*/
 	content		text not null,										 /*댓글 내용*/
+	groupId		int not null,											 /*그룹아이디 같은 댓들 안의 대댓글들의 그룹아이디는 같다.*/
+	level			int not null,											 /*대댓글의 구분을 위한 level (원본글은 0 , 대댓들은 1 대댓ㄱ르의 대댓글은 2....)*/
 	primary key(idx),														 /*기본키 : 고유번호 */
 	foreign key(boardIdx) references board2(idx) /*외래키 설정 상대방이 가진 값 중에 고유한 것이여야 한다.(primary key나 unique key로 가능하다. >> 둘 다 중복을 허용하지 않음)*/
 	on update cascade 					/*원본키에 대한 내용을 수정하면 같이 수정하겠다.*/
 	on delete restrict 					/*조인된 테이블이 있으면 원본 글을 삭제하지 못하게 한다.*/
 );
 
-desc boardReply;
+desc board2Reply;
 /*sql문을 쓸때에는 항상 미리 sql 연습을 하고 적용하기!*/
 /*날짜함수 처리연습*/
 select now();

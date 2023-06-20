@@ -13,6 +13,25 @@
 	<script>
 	'use strict';
 	
+	//전체댓글(보이기/가리기)
+	$(document).ready(function(){
+		$("#reply").show();
+		
+		
+		$("#replyHideBtn").click(function(){
+			$("#reply").slideUp(500);
+			$("#replyHideBtn").hide();
+			$("#replyViewBtn").show();
+		})
+		
+		$("#replyViewBtn").click(function(){
+			$("#reply").slideDown(500);
+			$("#replyHideBtn").show();
+			$("#replyViewBtn").hide();
+		})
+		
+	});
+	
 	function goodCheck(){
 		location.href="${ctp}/board/boardGoodCheck?idx=${vo.idx}&pageSize=${pageVO.pageSize}&pag=${pageVO.pag}";
 		
@@ -41,7 +60,7 @@
 		}
 		$.ajax({
 			type : "post",
-			url : "${ctp}/BoardReplyInput",
+			url : "${ctp}/board/boardReplyInput",
 			data : query,
 			success : function(res){
 				if(res == "1"){
@@ -58,6 +77,7 @@
 		});
 	}
 	
+	//댓글 삭제
 	function replyDelete(idx){
 		let ans = confirm("댓글을 삭제하시겠습니까?");
 		
@@ -81,11 +101,141 @@
 				}
 			})
 		};
+	}
+	
+	//대댓글 폼 출력하기 원 댓글의 댓글, 대댓글의 댓글....
+	function insertReply(idx,nickName,groupId,level){
+		let insReply = '';
+		insReply +='<div class="container">';
+		insReply +='<table class="m-2 p-0" style="width:90%">';
+		insReply +='<tr>';
+		insReply +='<td class="p-0 text-left">';
+		insReply +='<div >';
+		insReply +='답변 댓글 달기 : <input type="text" name="nickName" value="${sNickName}" size="6" readonly class="p-0"/>';
+		insReply +='</div>';
+		insReply +='</td>';
+		insReply +='<td class="text-right">';
+		insReply +='<input type="button" value="답글 달기" onclick="replyCheck2('+idx+','+groupId+','+level+')"';
+		insReply +='</td><tr/><tr><td colspan="2" class="text-center p-0">';
+		insReply +='<textarea row="3" class="form-control p-0" name="content" id="content'+idx+'">';
+		insReply +='@'+nickName+'\n';
+		insReply +='</textarea>';
+		insReply +='</td>';
+		insReply +='</tr>';
+		insReply +='</table>';
+		insReply +='</div>';
 		
+		$("#replyBoxOpenBtn"+idx).hide();
+		$("#replyBoxCloseBtn"+idx).show();
+		$("#replyBox"+idx).html(insReply);
+		$("#replyBox"+idx).slideDown(250);
+	}
+	
+	//대댓글 창 닫기
+	function closeReply(idx){
+		$("#replyBoxOpenBtn"+idx).show();
+		$("#replyBoxCloseBtn"+idx).hide();
+		$("#replyBox"+idx).slideUp(250);
+	}
+	
+	function replyCheck2(idx,groupId,level){
+		let boardIdx= '${vo.idx}';
+		let mid = '${sMid}';
+		let nickName = '${sNickName}';
+		let content = $("#content"+idx).val();
+		let postIp = '${pageContext.request.remoteAddr}';
+		
+		if(content == ""){
+			alert("답변글(대댓글을 입력하세요.)");
+			$("#content"+idx).focus();
+			return false;
+		}
+		
+		let query = {
+				boardIdx : ${vo.idx},
+				mid : mid,
+				nickName : nickName,
+				content : content,
+				postIp : postIp,
+				groupId : groupId,
+				level : level
+		}
+		
+		$.ajax({
+			type:"post",
+			url:"${ctp}/board/boardReplyInput2",
+			data:query,
+			success:function(){
+				location.reload();
+			},
+			error: function(){
+				alert("전송오류 발생");
+			}
+		})
+	}
+	
+	//대댓글 수정하기
+	function updateReplyForm(idx,content){
+		let insReply = '';
+		insReply +='<div class="container">';
+		insReply +='<table class="m-2 p-0" style="width:90%">';
+		insReply +='<tr>';
+		insReply +='<td class="p-0 text-left">';
+		insReply +='<div>';
+		insReply +='댓글 수정하기 : <input type="text" name="nickName" value="${sNickName}" size="6" readonly class="p-0"/>';
+		insReply +='</div>';
+		insReply +='</td>';
+		insReply +='<td class="text-right">';
+		insReply +='<input type="button" value="답글 달기" onclick="updateReply('+idx+')"';
+		insReply +='</td><tr/><tr><td colspan="2" class="text-center p-0">';
+		insReply +='<textarea row="3" class="form-control p-0" name="content" id="content'+idx+'">';
+		insReply += content.replaceAll("<br/>","\n");
+		insReply +='</textarea>';
+		insReply +='</td>';
+		insReply +='</tr>';
+		insReply +='</table>';
+		insReply +='</div>';
+		
+		$("#replyBoxOpenBtn"+idx).hide();
+		$("#replyBoxCloseBtn"+idx).show();
+		$("#replyBox"+idx).html(insReply);
+		$("#replyBox"+idx).slideDown(250);
 		
 	}
-
-	//댓글 삭제
+	
+	
+	
+	//댓글 전체 수정하기
+	function updateReply(idx){
+		let content = $("#content"+idx).val();
+		let postIp = "${pageContext.request.remoteAddr}"
+		
+		if(content==""){
+			alert("답변글(대댓글)을 입력하세요.");
+			$("#content"+idx).focus();
+			return false;
+		}
+		
+		let query = {
+				idx:idx,
+				content:content,
+				postIp : postIp
+		}
+		
+		$.ajax({
+			type:"post",
+			url:"${ctp}/board/boardReplyUpdate",
+			data:query,
+			success:function(){
+				alert("댓글이 수정되었씁디나!")
+				location.reload();
+			},
+			error:function(){
+				
+			}
+		})
+		
+	}
 	
 	
 	
@@ -167,27 +317,45 @@
 			</tr>
 		</table>
 		</c:if>
+		<!-- 댓글(대댓글) 보이기 가리기 처리 -->
+		<div class="text-center mb-3">
+			<input type="button" value="댓글 보이기" id="replyViewBtn" class="btn btn-secondary" style="display:none;"/>
+			<input type="button" value="댓글 가리기" id="replyHideBtn" class="btn btn-secondary" />
+		</div>
 		<!-- 댓글 리스트  -->
-	<div class="container">
+	<div id="reply" class="container">
 	<table class="table table-hover text-left">
 		<tr>
-			<th>작성자</th>
+			<th class="text-left">작성자</th>
 			<th>댓글내용</th>
 			<th>작성일자</th>
 			<th>접속IP</th>
+			<th>답글 쓰기</th>
 		</tr>
-		<c:forEach var="replyVo" items="${replyVos}">
+		<c:forEach var="replyVO" items="${replyVOS}">
 			<tr>
-				<td class="text-center">
-				${replyVo.nickName}
-					<c:if test="${sMid == replyVo.mid ||sLevel == 0}">
-						(<a href="javascript:replyDelete(${replyVo.idx})" title="댓글삭제"><b>삭제</b></a>)
+				<td class="text-left">
+				${replyVO.nickName}
+					<c:if test="${sMid == replyVO.mid ||sLevel == 0}">
+						(<a href="javascript:replyDelete(${replyVO.idx})" title="댓글삭제"><b>삭제</b></a>)
 					</c:if>
 				</td>
-				<td class="text-center">${fn:replace(replyVo.content, newLine,"<br/>")}</td>
-				<td class="text-center">${fn:substring(replyVo.WDate,0,10)}</td>
-				<td class="text-center">${replyVo.postIp}</td>
-				
+				<td class="text-center">${fn:replace(replyVO.content, newLine,"<br/>")}</td>
+				<td class="text-center">${fn:substring(replyVO.WDate,0,10)}</td>
+				<td class="text-center">${replyVO.postIp}</td>
+				<td class="text-center m-0 p-0">
+				<c:if test="${sMid == replyVO.mid ||sLevel == 0}">
+					<c:set var="content" value="${fn:replace(replyVO.content, newLine,'<br/>') }"/>
+					<input type="button" value="답글" onclick="insertReply('${replyVO.idx}','${replyVO.nickName}','${replyVO.groupId}','${replyVO.level}')" id="replyBoxOpenBtn${replyVO.idx}" class="btn btn-success btn-sm"/>
+					<input type="button" value="수정" onclick="updateReplyForm('${replyVO.idx}','${content}')" id="replyBoxBtn${replyVO.idx}" class="btn btn-success btn-sm"/>
+					<input type="button" value="닫기" onclick="closeReply(${replyVO.idx})"  id="replyBoxCloseBtn${replyVO.idx}" class="btn btn-success btn-sm"/>
+				</c:if>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="5" class="m-0 p-0" style="border-top:none;">
+					<div id="replyBox${replyVO.idx}"></div>
+				</td>
 			</tr>
 		</c:forEach>
 	</table>

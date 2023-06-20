@@ -17,6 +17,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.spring.javawebS.dao.BoardDAO;
 import com.spring.javawebS.vo.BoardGoodVO;
+import com.spring.javawebS.vo.BoardReplyVO;
 import com.spring.javawebS.vo.BoardVO;
 
 @Service
@@ -213,6 +214,30 @@ public class BoardServiceImpl implements BoardService {
 	public int getboardUpdate(BoardVO vo) {
 		
 		return boardDAO.getboardUpdate(vo);
+	}
+
+	@Override
+	public String getMaxGroupId(int boardIdx) {
+		
+		return boardDAO.getMaxGroupId(boardIdx);
+	}
+
+	@Override
+	public void setBoardReply(BoardReplyVO replyVO) {
+		boardDAO.setBoardReply(replyVO);
+		
+	}
+
+	@Override
+	public List<BoardReplyVO> getReplyList(int idx) {
+		
+		return  boardDAO.getReplyList(idx);
+	}
+
+	@Override
+	public void setBoardReplyUpdate(int idx, String content, String postIp) {
+		boardDAO.setBoardReplyUpdate(idx,content,postIp);
+		
 	}
 
 

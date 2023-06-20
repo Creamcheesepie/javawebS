@@ -3,6 +3,7 @@ package com.spring.javawebS.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.spring.javawebS.vo.BoardReplyVO;
 import com.spring.javawebS.vo.BoardVO;
 
 public interface BoardService {
@@ -30,6 +31,14 @@ public interface BoardService {
 	public void imgUpdate(String content, String root);
 
 	public int getboardUpdate(BoardVO vo);
+
+	public String getMaxGroupId(int boardIdx);
+
+	public void setBoardReply(BoardReplyVO replyVO);
+
+	public List<BoardReplyVO> getReplyList(int idx);
+
+	public void setBoardReplyUpdate(int idx, String content, String postIp);
 
 
 

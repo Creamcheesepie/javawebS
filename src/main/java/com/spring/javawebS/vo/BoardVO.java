@@ -1,4 +1,4 @@
-package com.spring.javawebS.vo;
+	package com.spring.javawebS.vo;
 
 import lombok.Data;
 

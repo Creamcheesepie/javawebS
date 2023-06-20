@@ -30,6 +30,14 @@
 		select * from board2 where ${search} like concat('%',#{searchString},'%') order by idx desc limit #{startIndexNo},#{pageSize};
 	</select>
 	
+	<select id="getMaxGroupId" resultType="String">
+		select max(groupId) from board2Reply where boardIdx = #{boardIdx};
+	</select>
+	
+	<select id="getReplyList" resultType="com.spring.javawebS.vo.BoardReplyVO">
+		select * from board2Reply where boardIdx=#{boardIdx} order by groupId, idx asc; 
+	</select>
+	
 	
 	
 	
@@ -38,11 +46,12 @@
 		insert into board2 values (default, #{vo.mid} , #{vo.nickName} , #{vo.title} , #{vo.email} , #{vo.homePage} , #{vo.content} , default , #{vo.hostIp} , #{vo.openSw} , default , default );
 	</insert>
 	
-	
-	
-	
 	<insert id="setBoardGoodMemberInput">
 		insert into goodCnt2 values (#{sector},#{idx},#{mid},default);
+	</insert>
+	
+	<insert id="setBoardReply">
+		insert into board2Reply values(default,#{replyVO.boardIdx},#{replyVO.mid},#{replyVO.nickName},default,#{replyVO.postIp},#{replyVO.content},#{replyVO.groupId},#{replyVO.level});
 	</insert>
 		
 		
@@ -57,6 +66,10 @@
 	
 	<update id="getboardUpdate">
 		update board2 set title=#{vo.title}, email=#{vo.email},content=#{vo.content},hostIp=#{vo.hostIp},openSw=#{vo.openSw} where idx = #{vo.idx};
+	</update>
+	
+	<update id="setBoardReplyUpdate">
+		update board2Reply set content = #{content}, postIp=#{postIp} where idx = ${idx};
 	</update>
 	
 	
