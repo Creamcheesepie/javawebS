@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javawebS.vo.EmailListVO;
 import com.spring.javawebS.vo.MemberVO;
+import com.spring.javawebS.vo.UserVO;
 
 public interface StudyService {
 
@@ -21,6 +22,10 @@ public interface StudyService {
 	public ArrayList<MemberVO> getMemberPartMidSearch(String mid);
 
 	public int fileUpload(MultipartFile fName, String mid);
+
+	public int setUserInput(UserVO vo);
+
+	public ArrayList<UserVO> getUserList();
 
 
 

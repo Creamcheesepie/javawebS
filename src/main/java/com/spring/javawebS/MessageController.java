@@ -162,11 +162,18 @@ public class MessageController {
 			model.addAttribute("msg", "게시글 수정에 성공하였습니다.");
 			model.addAttribute("url","/board/boardList?pag="+pag+"&pageSize="+pageSize);
 		}
-		else if(msgFlag.equals("redirect:/message/boardUpdateOk")) {
-			model.addAttribute("msg", "게시글 수정에 실패하였습니다.");
-			model.addAttribute("url","/board/boardList?pag="+pag+"&pageSize="+pageSize);
+		else if(msgFlag.equals("userInputOk")) {
+			model.addAttribute("msg", "유저 등록에 성공하였습니다.");
+			model.addAttribute("url","/study/validator/validatorList");
 		}
-		
+		else if(msgFlag.equals("userInputNo")) {
+			model.addAttribute("msg", "유저 등록에 실패하였습니다.입력항목을 확인해 주세요.");
+			model.addAttribute("url","/study/validator/validatorForm");
+		}
+		else if(msgFlag.equals("validatorNo")) {
+			model.addAttribute("msg", "유저 등록에 실패하였습니다.입력항목을 확인해 주세요.");
+			model.addAttribute("url","/study/validator/validatorForm");
+		}
 		
 		
 

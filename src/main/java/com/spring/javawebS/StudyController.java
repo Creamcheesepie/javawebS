@@ -23,6 +23,9 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +38,7 @@ import com.spring.javawebS.service.StudyService;
 import com.spring.javawebS.vo.EmailListVO;
 import com.spring.javawebS.vo.MailVO;
 import com.spring.javawebS.vo.MemberVO;
+import com.spring.javawebS.vo.UserVO;
 
 @Controller
 @RequestMapping("/study")
@@ -339,6 +343,47 @@ public class StudyController {
 		fis.close();
 
 		
+	}
+	
+	@RequestMapping(value = "/validator/validatorForm",method = RequestMethod.GET)
+	public String validatorFormGet() {
+		return "study/validator/validatorForm";
+	}
+	
+	
+	//validator를 이용한 유효성 검사
+	@RequestMapping(value = "/validator/validatorForm",method = RequestMethod.POST)
+	public String validatorFormPost(
+			@Validated UserVO vo, BindingResult bindingResult
+			) {
+		System.out.println("vo: " +vo);
+		
+		System.out.println("error:" + bindingResult.hasErrors());
+		
+		if(bindingResult.hasErrors()) {
+			List<ObjectError> list = bindingResult.getAllErrors();
+			System.out.println("-----------------------------");
+			for(ObjectError e : list) { 
+				System.out.println("메세지 : " + e.getDefaultMessage());
+			}
+			return  "redirect:/message/validatorNo";
+		}
+		
+
+		int res= service.setUserInput(vo);
+		
+		if(res==1)return "redirect:/message/userInputOk";
+		else return  "redirect:/message/userInputNo";
+	}
+	
+	@RequestMapping(value = "/validator/validatorList" , method=RequestMethod.GET)
+	public String userListGet(Model model ) {
+		
+		ArrayList<UserVO> vos = service.getUserList();
+		
+		model.addAttribute("vos", vos);
+		
+		return "study/validator/validatorList";
 	}
 	
 	

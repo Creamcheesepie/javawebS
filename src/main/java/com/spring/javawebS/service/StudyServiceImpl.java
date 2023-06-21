@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.spring.javawebS.dao.StudyDAO;
 import com.spring.javawebS.vo.EmailListVO;
 import com.spring.javawebS.vo.MemberVO;
+import com.spring.javawebS.vo.UserVO;
 
 @Service
 public class StudyServiceImpl implements StudyService {
@@ -143,6 +144,19 @@ public class StudyServiceImpl implements StudyService {
 		fos.write(data);
 		fos.close();
 	}
+
+	@Override
+	public int setUserInput(UserVO vo) {
+		return studyDAO.setUserInput(vo);
+	}
+
+	@Override
+	public ArrayList<UserVO> getUserList() {
+		
+		return studyDAO.getUserList();
+	}
+
+	
 	
 	
 	

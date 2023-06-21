@@ -15,6 +15,15 @@
 		select * from member2 where mid like concat('%',#{mid},'%') order by idx desc;
 	</select>
 	
+	<select id="getUserList" resultType="com.spring.javawebS.vo.UserVO">
+		select * from user order by idx desc;
+	</select>
+	
+	
+	
+	<insert id="setUserInput">
+		insert into user values(default,#{vo.mid},#{vo.name},#{vo.age},#{vo.address});
+	</insert>
 	
 
 </mapper>
