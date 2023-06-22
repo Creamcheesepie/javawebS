@@ -1,11 +1,21 @@
 package com.spring.javawebS;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +42,7 @@ public class PdsController {
 	@RequestMapping(value = "/pdsList",method = RequestMethod.GET)
 	public String pdsListGet(Model model,
 			@RequestParam(name="pag", defaultValue="1",required=false) int pag,
-			@RequestParam(name="pageSize", defaultValue="1",required=false) int pageSize,
+			@RequestParam(name="pageSize", defaultValue="5",required=false) int pageSize,
 			@RequestParam(name="part", defaultValue="",required=false) String part
 			) {
 		if(part.equals("")) part="전체";
@@ -67,6 +77,61 @@ public class PdsController {
 		
 		
 		return "pds/pdsList";
+	}
+	
+	//전체파일 다운로드 하기
+	@RequestMapping(value = "/pdsTotalDown",method = RequestMethod.GET)
+	public String pdsTotalDownGet( HttpServletRequest request, int idx) throws IOException {
+		//파일 다운로드 횟수 증가
+		
+		//여러개의 파일을 다운로드 할 경우 하나의 파일(zip)로 합쳐 다운로드한다. 압축될 파일명은 'title.zip'으로 다운로드 받는다.
+		String realpath = request.getSession().getServletContext().getRealPath("/resources/data/pds/");
+		
+		PdsVO vo = pdsService.getPdsIdxSearch(idx);
+		System.out.println(vo);
+		String[] fNames = vo.getFName().split("/");
+		String[] fsNames = vo.getFSName().split("/");
+		
+		String zipPath = realpath+"temp/";
+		String zipName = vo.getTitle()+".zip";
+		
+		FileInputStream fis = null;
+		FileOutputStream fos = null;
+		
+		ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(zipPath+zipName));
+		
+		byte[] buffer = new byte[2048];
+		
+		for(int i=0;i<fsNames.length;i++) {
+			fis = new FileInputStream(realpath+fsNames[i]);
+			fos = new FileOutputStream(zipPath+fNames[i]);
+			File moveAndRename = new File(zipPath + fNames[i]);
+			
+			//fos에 파일을 쓰기 작업
+			int data;
+			while((data = fis.read(buffer,0,buffer.length))!= -1) {
+				fos.write(buffer, 0, data);
+			}
+			fos.flush();
+			fos.close();
+			fis.close();
+			//zipfile에 fos를 넣어준다.
+			
+		 fis = new FileInputStream(moveAndRename);
+		 zout.putNextEntry(new ZipEntry(fNames[i]));
+		 while((data = fis.read(buffer,0,buffer.length))!= -1) {
+			 zout.write(buffer,0,data);
+		 }
+		 zout.flush();
+		 zout.closeEntry();
+		 
+		}
+		zout.close();
+		
+		
+		
+		
+		return "";
 	}
 	
 	

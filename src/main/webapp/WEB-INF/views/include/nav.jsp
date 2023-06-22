@@ -29,7 +29,7 @@
 					</button>
 					<div class="w3-dropdown-content w3-bar-block w3-card-4">
 						<a href="${ctp}/study/validator/validatorForm" class="w3-bar-item w3-button">validator연습</a> 
-
+						<a href="${ctp}/study/kakaomap/kakaomap" class="w3-bar-item w3-button">kakaoMap연습</a>
 					</div>
 				</div>
 				<div class="w3-dropdown-hover w3-hide-small">

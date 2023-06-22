@@ -21,9 +21,12 @@
 	
 	
 	
+	
 	<insert id="setUserInput">
 		insert into user values(default,#{vo.mid},#{vo.name},#{vo.age},#{vo.address});
 	</insert>
+	
+
 	
 
 </mapper>

@@ -11,6 +11,10 @@
 		select count(*) from psd2 <if test='part !="전체"'>where part = #{part}</if> ;
 	</select>
 	
+	<select id="getPdsIdxSearch" resultType="com.spring.javawebS.vo.PdsVO">
+		select * from pds2 where idx = #{idx};
+	</select>
+	
 	
 	<insert id="setPdsInput">
 		insert into pds2 values (default,#{vo.mid},#{vo.nickName},#{vo.FName},#{vo.FSName},#{vo.FSize},#{vo.title},#{vo.part},#{vo.pwd},default,default,#{vo.openSw},#{vo.content},#{vo.hostIp});

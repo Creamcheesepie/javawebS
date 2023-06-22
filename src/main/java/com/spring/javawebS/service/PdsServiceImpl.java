@@ -94,6 +94,13 @@ public class PdsServiceImpl implements PdsService {
 		
 		return fName;
 	}
+
+
+	@Override
+	public PdsVO getPdsIdxSearch(int idx) {
+		
+		return pdsDAO.getPdsIdxSearch(idx);
+	}
 	
 	
 }

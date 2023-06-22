@@ -13,5 +13,7 @@ public interface PdsDAO {
 	public int totRecCnt(@Param("part") String part);
 
 	public void setPdsInput(@Param("vo") PdsVO vo);
+
+	public PdsVO getPdsIdxSearch(@Param("idx") int idx);
 	
 }

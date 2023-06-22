@@ -186,17 +186,21 @@
 					<c:if test="${vo.hour_diff<=24}">${fn:substring(vo.FDate,10,16)}</c:if>
 					<c:if test="${vo.hour_diff>24}">${fn:substring(vo.FDate,0,10)}</c:if>	
 				</td>
-				<td>${vo.part}</td>
+				<td>${vo.part}</td> 
 				<td>
 					<c:set var="FNames" value="${fn:split(vo.FName,'/')}"/>
 					<c:set var="FSNames" value="${fn:split(vo.FSName,'/')}"/>
 					<c:forEach var="FName" items="${FNames}" varStatus="st">
-						<a href="${ctp}/images/pds/${FSNames[st.index]}" download="${FName}" onclick="downNumCheck(${vo.idx})">${FName}</a><br/>
+						<a href="${ctp}/resources/data/pds/${FSNames[st.index]}" download="${FName}" onclick="downNumCheck(${vo.idx})">${FName}</a><br/>
 					</c:forEach>
 					(<fmt:formatNumber value="${vo.FSize/1024}" pattern="#,##0"/>KByte)
 				</td>
 				<td>${vo.downNum}</td>
-				<td>${vo.FSName}</td>
+				<td>
+				<c:forEach var="FSName" items="${FSNames}" varStatus="st">
+						${FSName}<br/>
+					</c:forEach>
+				</td>
 				<td>
 				<a href="${ctp}/pds/pdsTotalDown?idx=${vo.idx}" class="badge badge-info">전체다운로드</a><br/>
 				<a href="javascript:pdsDeleteCheck('${vo.idx}','${vo.FSName}')" class="badge badge-danger">삭제</a>

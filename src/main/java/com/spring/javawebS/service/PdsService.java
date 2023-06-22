@@ -12,4 +12,6 @@ public interface PdsService {
 
 	public void setPdsInput(PdsVO vo, MultipartHttpServletRequest file);
 
+	public PdsVO getPdsIdxSearch(int idx);
+
 }
