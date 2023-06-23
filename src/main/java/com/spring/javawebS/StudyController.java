@@ -1,5 +1,13 @@
 package com.spring.javawebS;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
+import java.awt.RenderingHints;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,12 +18,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import javax.imageio.ImageIO;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -39,6 +49,7 @@ import com.spring.javawebS.vo.EmailListVO;
 import com.spring.javawebS.vo.KakaoAddressVO;
 import com.spring.javawebS.vo.MailVO;
 import com.spring.javawebS.vo.MemberVO;
+import com.spring.javawebS.vo.QrCodeVO;
 import com.spring.javawebS.vo.UserVO;
 
 @Controller
@@ -255,8 +266,7 @@ public class StudyController {
 	@ResponseBody
 	@RequestMapping(value = "/ajax/ajaxTest3_1",method = RequestMethod.POST)
 	public MemberVO ajaxTest3_1FormGet(String mid) {
-		
-		
+
 		return service.getMemberMidSearch(mid);
 	}
 	
@@ -479,9 +489,6 @@ public class StudyController {
 			
 			return "study/kakaomap/kakaomapStaticEx1";
 		}
-	
-		
-		
 		
 		@RequestMapping(value = "/kakaomap/kakaomapStaticEx2" , method=RequestMethod.GET)
 		public String kakaomapStaticEx2Get(Model model,
@@ -497,5 +504,136 @@ public class StudyController {
 			return "study/kakaomap/kakaomapStaticEx2";
 		}
 		
+		@RequestMapping(value = "/qrCode/qrCodeForm" , method=RequestMethod.GET)
+		public String qrCodeFormGet() {
+			return "study/qrCode/qrCodeForm";
+		}
 	
+		//개인정보 등록
+		@RequestMapping(value = "/qrCode/qrCodeEx1" , method=RequestMethod.GET)
+		public String qrCodeEx1Get() {
+			return "study/qrCode/qrCodeEx1";
+		}
+		
+		@ResponseBody
+		@RequestMapping(value = "/qrCode/qrCodeEx1" , method=RequestMethod.POST,produces = "application/text; charset=utf-8")
+		public String qrCodeEx1Post(QrCodeVO vo,HttpServletRequest request) {
+			String realPath = request.getSession().getServletContext().getRealPath("/resources/data/qrCode/");
+			
+			String qrCodeName = service.qrCreate(vo,realPath);
+			
+			return qrCodeName;
+		}
+		
+		//QR코드 폼 정보 사이트 등록
+		@RequestMapping(value = "/qrCode/qrCodeEx2" , method=RequestMethod.GET)
+		public String qrCodeEx2Get() {
+			return "study/qrCode/qrCodeEx2";
+		}
+		
+		@ResponseBody
+		@RequestMapping(value = "/qrCode/qrCodeEx2" , method=RequestMethod.POST,produces = "application/text; charset=utf-8")
+		public String qrCodeEx2Post(QrCodeVO vo,HttpServletRequest request) {
+			String realPath = request.getSession().getServletContext().getRealPath("/resources/data/qrCode/");
+			
+			String qrCodeName = service.qrCreate2(vo,realPath);
+			
+			return qrCodeName;
+		}
+		
+		
+		//예매하기
+		@RequestMapping(value = "/qrCode/qrCodeEx3" , method=RequestMethod.GET)
+		public String qrCodeEx3Get() {
+			return "study/qrCode/qrCodeEx3";
+		}
+		
+		@ResponseBody
+		@RequestMapping(value = "/qrCode/qrCodeEx3" , method=RequestMethod.POST,produces = "application/text; charset=utf-8")
+		public String qrCodeEx3Post(QrCodeVO vo,HttpServletRequest request) {
+			String realPath = request.getSession().getServletContext().getRealPath("/resources/data/qrCode/");
+			
+			String qrCodeName = service.qrCreate3(vo,realPath);
+			
+			return qrCodeName;
+		}
+		
+		//예매하기
+		@RequestMapping(value = "/qrCode/qrCodeEx4" , method=RequestMethod.GET)
+		public String qrCodeEx4Get() {
+			return "study/qrCode/qrCodeEx4";
+		}
+		
+		@ResponseBody
+		@RequestMapping(value = "/qrCode/qrCodeEx4" , method=RequestMethod.POST,produces = "application/text; charset=utf-8")
+		public String qrCodeEx4Post(QrCodeVO vo,HttpServletRequest request) {
+			String realPath = request.getSession().getServletContext().getRealPath("/resources/data/qrCode/");
+			
+			String qrCodeName = service.qrCreate4(vo,realPath);
+			
+			return qrCodeName;
+		}
+		
+		//QR코드 폼(영화 얘매하기) - DB 검색
+		@ResponseBody
+		@RequestMapping(value = "/qrCode/qrCodeSearch" , method=RequestMethod.POST)
+		public QrCodeVO qrCodeSearchPost(String qrCode) {
+			QrCodeVO vo = service.getQrCodeSearch(qrCode);
+			System.out.println(vo);
+			return vo;
+		}
+		
+				
+		//캡차
+		@RequestMapping(value = "/captcha/captchaForm" , method=RequestMethod.GET)
+		public String captchaFormGet() {
+			return "study/captcha/captchaForm";
+		}
+		
+		//캡차 이미지 생성하기(랜덤하게 생성)
+		@ResponseBody
+		@RequestMapping(value = "/captcha/captchaImage" , method=RequestMethod.POST)
+		public String captchaImagePost(HttpServletRequest request, HttpServletResponse response) {
+			try {
+				
+				//알파벳 +숫자가 섞인 5글자 문자열을 랜덤하게 생성한다.
+				String randomString = RandomStringUtils.randomAlphanumeric(5);
+				
+				System.out.println("randomString : " + randomString);
+				
+				request.getSession().setAttribute("CAPTCHA", randomString);
+				
+				//시스템에 등록된 폰트들의 목록(이름)을 확인
+				//Font[] fontList = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+				Font font = new Font("Jokerman", Font.ITALIC, 30);
+				FontRenderContext frc= new FontRenderContext(null,true, true);
+				Rectangle2D bounds = font.getStringBounds(randomString, frc);
+				int w = (int) bounds.getWidth();
+				int h = (int) bounds.getHeight();
+				
+				//이미지로 생성
+				BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+				Graphics2D g = image.createGraphics();
+				//g.setColor(Color.white);
+				g.fillRect(0, 0, w, h);
+				g.setColor(new Color(0,156,240));
+				g.setFont(font);
+				
+				g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+				g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+				g.drawString(randomString, (float)bounds.getX(), (float)-bounds.getY());
+				
+				g.dispose();
+				
+				String realPath = request.getSession().getServletContext().getRealPath("/resources/images");
+				ImageIO.write(image, "png", new File(realPath+"captcha.png"));
+				System.out.println("완료");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			return "study/captcha/captchaForm";
+		}
+		
+		
 }
