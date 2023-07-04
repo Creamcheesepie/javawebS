@@ -32,6 +32,9 @@
 						<a href="${ctp}/study/kakaomap/kakaomap" class="w3-bar-item w3-button">kakaoMap연습</a>
 						<a href="${ctp}/study/qrCode/qrCodeForm" class="w3-bar-item w3-button">qrCode 연습</a>
 						<a href="${ctp}/study/captcha/captchaForm" class="w3-bar-item w3-button">captcha연습</a>
+						<a href="${ctp}/study/thumbnail/thumbnailForm" class="w3-bar-item w3-button">섬네일 연습</a>
+						<a href="${ctp}/errorPage/errorMain" class="w3-bar-item w3-button">error연습</a>
+						<a href="${ctp}/study/transaction/transaction" class="w3-bar-item w3-button">transaction 연습</a>
 					</div>
 				</div>
 				<div class="w3-dropdown-hover w3-hide-small">

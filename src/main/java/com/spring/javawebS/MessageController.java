@@ -174,6 +174,18 @@ public class MessageController {
 			model.addAttribute("msg", "유저 등록에 실패하였습니다.입력항목을 확인해 주세요.");
 			model.addAttribute("url","/study/validator/validatorForm");
 		}
+		else if(msgFlag.equals("transactionInputOk1")) {
+			model.addAttribute("msg", "개별회원등록처리가 완료되었습니다.");
+			model.addAttribute("url","/study/transaction/transaction");
+		}
+		else if(msgFlag.equals("transactionInputOk2")) {
+			model.addAttribute("msg", "일괄회원등록처리가 완료되었습니다.");
+			model.addAttribute("url","/study/transaction/transaction");
+		}
+		else if(msgFlag.equals("transactionList")) {
+			model.addAttribute("msg", "회원 목록으로 이동합니다");
+			model.addAttribute("url","/study/transaction/transactionList");
+		}
 		
 		
 

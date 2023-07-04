@@ -9,6 +9,7 @@ import com.spring.javawebS.vo.EmailListVO;
 import com.spring.javawebS.vo.KakaoAddressVO;
 import com.spring.javawebS.vo.MemberVO;
 import com.spring.javawebS.vo.QrCodeVO;
+import com.spring.javawebS.vo.TransactionVO;
 import com.spring.javawebS.vo.UserVO;
 
 public interface StudyService {
@@ -46,6 +47,14 @@ public interface StudyService {
 	public String qrCreate4(QrCodeVO vo, String realPath);
 
 	public QrCodeVO getQrCodeSearch(String qrCode);
+
+	public void setTransactionUserInput(TransactionVO vo);
+
+	public void setTransactionUser2Input(TransactionVO vo);
+
+	public void setTransactionUserTotalInput(TransactionVO vo);
+
+	public List<TransactionVO> getTransactionList();
 
 
 

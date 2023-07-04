@@ -3,7 +3,6 @@ package com.spring.javawebS;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
@@ -32,6 +31,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -50,6 +50,7 @@ import com.spring.javawebS.vo.KakaoAddressVO;
 import com.spring.javawebS.vo.MailVO;
 import com.spring.javawebS.vo.MemberVO;
 import com.spring.javawebS.vo.QrCodeVO;
+import com.spring.javawebS.vo.TransactionVO;
 import com.spring.javawebS.vo.UserVO;
 
 @Controller
@@ -633,6 +634,54 @@ public class StudyController {
 			}
 			
 			return "study/captcha/captchaForm";
+		}
+		
+		
+		@RequestMapping(value = "/thumbnail/thumbnailForm" , method=RequestMethod.GET)
+		public String thumbnailFormGet() {
+			return "study/thumbnail/thumbnailForm";
+		}		
+		
+		@RequestMapping(value="/transaction/transaction",method=RequestMethod.GET)
+		public String transactionListGet() {
+			return "study/transaction/transaction";
+		}
+		
+		//transaction 개별 입력처리
+		@Transactional
+		@RequestMapping(value="/transaction/input1",method=RequestMethod.POST)
+		public String transactionInput1Post(TransactionVO vo) {
+			service.setTransactionUserInput(vo);
+			service.setTransactionUser2Input(vo);
+			
+			return "redirect:/message/transactionInputOk1";
+		}
+		
+		//transaction 일괄 입력처리
+		@RequestMapping(value="/transaction/input2",method=RequestMethod.POST)
+		public String transactionInput2Post(TransactionVO vo) {
+			service.setTransactionUserTotalInput(vo);
+			//이곳은 기타 처리가 들어가는 영역입니다.
+			
+			
+			return "redirect:/message/transactionInputOk2";
+		}
+
+		
+		@RequestMapping(value="/transaction/transactionListGet",method=RequestMethod.GET)
+		public String transactionListGetGet(Model model) {
+			List<TransactionVO> vos =service.getTransactionList();
+
+			model.addAttribute("vos", vos);
+			return "redirect:/message/transactionList";
+		}
+		
+		@RequestMapping(value="/transaction/transactionList",method=RequestMethod.GET)
+		public String transactionListGet(Model model) {
+			List<TransactionVO> vos =service.getTransactionList();
+			
+			model.addAttribute("vos", vos);
+			return "study/transaction/transactionList";
 		}
 		
 		

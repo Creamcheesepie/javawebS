@@ -23,6 +23,11 @@
 		select * from qrCode where qrCodeName=#{qrCode};
 	</select>
 	
+	<select id="getTransactionList" resultType="com.spring.javawebS.vo.TransactionVO">
+		select * from user;
+		select * from user2;
+	</select>
+	
 	
 	
 	<insert id="setUserInput">
@@ -32,7 +37,19 @@
 	<insert id="setQrCodeInput">
 		insert into qrCode values(default, #{vo.mid},#{vo.name},#{vo.email},#{vo.movieName},#{vo.movieDate},#{vo.movieTime},#{vo.movieAdult},#{vo.movieChild},#{vo.publishNow},#{vo.qrCodeName});
 	</insert>
-
+	
+	<insert id="setTransactionUserInput">
+		insert  into user values(default, #{vo.mid},#{vo.name},#{vo.age},#{vo.address});
+	</insert>
+	
+	<insert id="setTransactionUser2Input">
+		insert into user2 values(#{vo.mid},#{vo.nickName},#{vo.job});
+	</insert>
+	
+	<insert id="setTransactionUserTotalInput">
+		insert into user values(default, #{vo.mid},#{vo.name},#{vo.age},#{vo.address});
+		insert into user2 values(#{vo.mid},#{vo.nickName},#{vo.job});
+	</insert>
 	
 
 </mapper>
